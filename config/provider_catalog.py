@@ -13,6 +13,38 @@ TransportType = Literal["openai_chat", "anthropic_messages"]
 
 # Default upstream base URLs (also re-exported via :mod:`providers.defaults`)
 NVIDIA_NIM_DEFAULT_BASE = "https://integrate.api.nvidia.com/v1"
+
+# Tested 2026-05-08 — models that responded to /v1/chat/completions.
+# Sorted by response speed (fastest first) within each tier.
+# Tier key -> annotation shown in Claude Code's /model picker:
+#   tools  = confirmed tool_calls support (full Claude Code capability)
+#   text   = basic chat only (no tool calls)
+#   basic  = responded to chat, tools untested
+NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
+    "meta/llama-3.2-11b-vision-instruct",
+    "meta/llama-4-maverick-17b-128e-instruct",
+    "moonshotai/kimi-k2-instruct",
+    "meta/llama-3.3-70b-instruct",
+    "qwen/qwen3-next-80b-a3b-instruct",
+    "qwen/qwen3.5-122b-a10b",
+    "qwen/qwen3-next-80b-a3b-thinking",
+    "meta/llama-3.1-70b-instruct",
+    "stepfun-ai/step-3.5-flash",
+    "moonshotai/kimi-k2.6",
+})
+NVIDIA_NIM_TEXT_MODELS: frozenset[str] = frozenset({
+    "meta/llama-3.1-8b-instruct",
+    "upstage/solar-10.7b-instruct",
+})
+NVIDIA_NIM_BASIC_MODELS: frozenset[str] = frozenset({
+    "sarvamai/sarvam-m",
+    "google/gemma-2-2b-it",
+    "meta/llama-3.2-1b-instruct",
+})
+NVIDIA_NIM_FREE_MODELS: frozenset[str] = (
+    NVIDIA_NIM_TOOL_MODELS | NVIDIA_NIM_TEXT_MODELS | NVIDIA_NIM_BASIC_MODELS
+)
+
 KIMI_DEFAULT_BASE = "https://api.moonshot.ai/v1"
 # DeepSeek Anthropic-compatible Messages API (not OpenAI ``/v1`` chat completions).
 DEEPSEEK_ANTHROPIC_DEFAULT_BASE = "https://api.deepseek.com/anthropic"

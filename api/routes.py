@@ -3,6 +3,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from loguru import logger
 
+from config.provider_catalog import (
+    NVIDIA_NIM_BASIC_MODELS,
+    NVIDIA_NIM_FREE_MODELS,
+    NVIDIA_NIM_TEXT_MODELS,
+    NVIDIA_NIM_TOOL_MODELS,
+)
 from config.settings import Settings
 from core.anthropic import get_token_count
 from providers.registry import ProviderRegistry
@@ -101,13 +107,24 @@ def _append_provider_model_variants(
     *,
     supports_thinking: bool | None = None,
 ) -> None:
+    # Tag NVIDIA NIM models with capability annotation
+    tag = ""
+    prefix, _, model_name = provider_model_ref.partition("/")
+    if prefix == "nvidia_nim":
+        if model_name in NVIDIA_NIM_TOOL_MODELS:
+            tag = " [tools]"
+        elif model_name in NVIDIA_NIM_TEXT_MODELS:
+            tag = " [text]"
+        elif model_name in NVIDIA_NIM_BASIC_MODELS:
+            tag = " [basic]"
+
     if supports_thinking is not False:
         _append_unique_model(
             models,
             seen,
             _discovered_model_response(
                 gateway_model_id(provider_model_ref),
-                display_name=provider_model_ref,
+                display_name=f"{provider_model_ref}{tag}",
             ),
         )
     _append_unique_model(
@@ -115,7 +132,7 @@ def _append_provider_model_variants(
         seen,
         _discovered_model_response(
             no_thinking_gateway_model_id(provider_model_ref),
-            display_name=f"{provider_model_ref} (no thinking)",
+            display_name=f"{provider_model_ref}{tag} (no thinking)",
         ),
     )
 
@@ -141,6 +158,13 @@ def _build_models_list_response(
 
     if provider_registry is not None:
         for model_info in provider_registry.cached_prefixed_model_infos():
+            prefix, _, model_name = model_info.model_id.partition("/")
+            # Only show NVIDIA NIM models that are in the known-free list
+            if prefix == "nvidia_nim" and model_name not in NVIDIA_NIM_FREE_MODELS:
+                continue
+            # Skip all discovered Azure AI Foundry models (only show configured ones above)
+            if prefix == "azure_foundry":
+                continue
             _append_provider_model_variants(
                 models,
                 seen,
