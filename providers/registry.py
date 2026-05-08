@@ -74,6 +74,22 @@ def _create_kimi(config: ProviderConfig, _settings: Settings) -> BaseProvider:
     return KimiProvider(config)
 
 
+def _create_azure_foundry(config: ProviderConfig, _settings: Settings) -> BaseProvider:
+    from providers.azure_foundry import AzureFoundryProvider
+
+    provider = AzureFoundryProvider(config)
+
+    # Inject extra model IDs from configured model refs
+    extra: set[str] = set()
+    for ref in _settings.configured_chat_model_refs():
+        if ref.provider_id == "azure_foundry":
+            extra.add(ref.model_id)
+    if extra:
+        provider.set_extra_model_ids(frozenset(extra))
+
+    return provider
+
+
 PROVIDER_FACTORIES: dict[str, ProviderFactory] = {
     "nvidia_nim": _create_nvidia_nim,
     "open_router": _create_open_router,
@@ -82,6 +98,7 @@ PROVIDER_FACTORIES: dict[str, ProviderFactory] = {
     "llamacpp": _create_llamacpp,
     "ollama": _create_ollama,
     "kimi": _create_kimi,
+    "azure_foundry": _create_azure_foundry,
 }
 
 if set(PROVIDER_DESCRIPTORS) != set(SUPPORTED_PROVIDER_IDS) or set(

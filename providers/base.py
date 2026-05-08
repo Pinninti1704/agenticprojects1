@@ -29,6 +29,7 @@ class ProviderConfig(BaseModel):
     proxy: str = ""
     log_raw_sse_events: bool = False
     log_api_error_tracebacks: bool = False
+    model_ref: str | None = None
 
 
 class BaseProvider(ABC):

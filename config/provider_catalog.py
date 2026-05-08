@@ -22,6 +22,7 @@ OPENROUTER_DEFAULT_BASE = "https://openrouter.ai/api/v1"
 LMSTUDIO_DEFAULT_BASE = "http://localhost:1234/v1"
 LLAMACPP_DEFAULT_BASE = "http://localhost:8080/v1"
 OLLAMA_DEFAULT_BASE = "http://localhost:11434"
+AZURE_FOUNDRY_DEFAULT_BASE = "https://ai.azure.com"
 
 
 @dataclass(frozen=True, slots=True)
@@ -111,6 +112,17 @@ PROVIDER_CATALOG: dict[str, ProviderDescriptor] = {
         credential_attr="kimi_api_key",
         default_base_url=KIMI_DEFAULT_BASE,
         proxy_attr="kimi_proxy",
+        capabilities=("chat", "streaming", "tools"),
+    ),
+    "azure_foundry": ProviderDescriptor(
+        provider_id="azure_foundry",
+        transport_type="openai_chat",
+        credential_env="AZURE_FOUNDRY_API_KEY",
+        credential_url="https://ai.azure.com",
+        credential_attr="azure_foundry_api_key",
+        base_url_attr="azure_foundry_base_url",
+        default_base_url=AZURE_FOUNDRY_DEFAULT_BASE,
+        proxy_attr="azure_foundry_proxy",
         capabilities=("chat", "streaming", "tools"),
     ),
 }
