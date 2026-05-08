@@ -22,7 +22,6 @@ NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
     # Confirmed working with chat + tools (tested 2026-05-08)
     "meta/llama-4-maverick-17b-128e-instruct",
     "minimaxai/minimax-m2.5",
-    "upstage/solar-10.7b-instruct",
     "qwen/qwen3-next-80b-a3b-instruct",
     "qwen/qwen3-next-80b-a3b-thinking",
     "stepfun-ai/step-3.5-flash",
@@ -49,7 +48,6 @@ NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
 NVIDIA_NIM_MODEL_SPEEDS: dict[str, str] = {
     "meta/llama-4-maverick-17b-128e-instruct": "455ms",
     "minimaxai/minimax-m2.5": "722ms",
-    "upstage/solar-10.7b-instruct": "514ms",
     "qwen/qwen3-next-80b-a3b-instruct": "641ms",
     "qwen/qwen3-next-80b-a3b-thinking": "465ms",
     "stepfun-ai/step-3.5-flash": "619ms",
