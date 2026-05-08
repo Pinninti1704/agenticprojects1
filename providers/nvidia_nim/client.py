@@ -54,6 +54,12 @@ class NvidiaNimProvider(OpenAIChatTransport):
             error_text = f"{error_text} {json.dumps(error_body, default=str)}"
         error_text = error_text.lower()
 
+        logger.debug(
+            "NIM_RETRY: checking error body type={} str_err_start={}",
+            type(error_body).__name__ if error_body is not None else "None",
+            str(error)[:200],
+        )
+
         if "reasoning_budget" in error_text:
             retry_body = clone_body_without_reasoning_budget(body)
             if retry_body is None:
@@ -89,4 +95,9 @@ class NvidiaNimProvider(OpenAIChatTransport):
             )
             return retry_body
 
+        logger.debug(
+            "NIM_RETRY: no retry handler matched for 400 error exc_type={} err_str_start={}",
+            type(error).__name__,
+            str(error)[:300],
+        )
         return None
