@@ -534,15 +534,39 @@ This will print:
 FULL_PAYLOAD [req_abc123]: { ... full request body ... }
 ```
 
-**Tip:** If the terminal scrolls too fast, you can also check the log file (configured via `LOG_FILE` in `.env`, defaults to `server.log`):
+**Tip:** If the terminal scrolls too fast, you can also check **the log file**. By default, the server writes JSON-structured logs to `./server.log` (relative to the project root, i.e. `c:/Users/satya/Localagent/free-claude-code/server.log`). Customize via `LOG_FILE` in `.env`:
 ```bash
-# Tail the log file in a second terminal
+LOG_FILE="/absolute/path/to/my-server.log"
+```
+
+**Linux / macOS (or Git Bash on Windows)** — tail the log file in a second terminal:
+```bash
+# Follow new log entries in real time
 tail -f server.log
 
-# Or grep for specific keywords
+# Search for Azure Foundry specific lines
 grep "AZURE_FOUNDRY" server.log
+
+# Search for API requests
 grep "API_REQUEST" server.log
+
+# Search for errors
 grep "Error" server.log
+```
+
+**Windows PowerShell** — equivalents:
+```powershell
+# Follow new log entries in real time (like tail -f)
+Get-Content server.log -Tail 10 -Wait
+
+# Search for Azure Foundry specific lines
+Select-String -Path server.log -Pattern "AZURE_FOUNDRY"
+
+# Search for API requests
+Select-String -Path server.log -Pattern "API_REQUEST"
+
+# Search for errors
+Select-String -Path server.log -Pattern "Error"
 ```
 
 ### 2. Run a manual smoke test
@@ -577,20 +601,16 @@ git branch
 
 ## Rollback Instructions
 
-### Option A: Revert the single commit (cleanest)
+### Option A: Revert the single commit (cleanest way to undo)
 
 ```bash
-# 1. Check which branch you're on
+# Check which branch you're on
 git branch
 
-# 2. If on main:
+# If on main, revert the Azure Foundry commit:
 git revert b269a8f
 # This creates a new commit that undoes all changes.
 # No force push needed.
-
-# 3. If on azure-foundry-working and want to delete the branch:
-git checkout main
-git branch -D azure-foundry-working
 ```
 
 ### Option B: Reset to before the commit (destructive, use with care)
@@ -629,14 +649,17 @@ git add -A
 git commit -m "revert: remove Azure AI Foundry provider"
 ```
 
-### Option D: Delete the reference branch
+### Getting back the Azure Foundry changes (if you're on a different branch)
+
+If you switched away from `azure-foundry-working` and want to return:
 
 ```bash
-# Local
-git branch -D azure-foundry-working
+# 1. Check out the branch
+git checkout azure-foundry-working
 
-# Remote (if it was pushed)
-git push origin --delete azure-foundry-working
+# 2. Confirm you have the latest commit
+git log --oneline -1
+# Should show: b269a8f feat: add Azure AI Foundry provider support
 ```
 
 ---
