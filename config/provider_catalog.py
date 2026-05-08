@@ -15,35 +15,77 @@ TransportType = Literal["openai_chat", "anthropic_messages"]
 NVIDIA_NIM_DEFAULT_BASE = "https://integrate.api.nvidia.com/v1"
 
 # Tested 2026-05-08 — models that responded to /v1/chat/completions.
-# Sorted by response speed (fastest first) within each tier.
-# Tier key -> annotation shown in Claude Code's /model picker:
-#   tools  = confirmed tool_calls support (full Claude Code capability)
-#   text   = basic chat only (no tool calls)
-#   basic  = responded to chat, tools untested
+# Models tagged in the /model picker as:
+#   [tools] = confirmed tool_calls  [text] = basic chat only  [basic] = untested with tools
+# Mistral/Llama models with [tools] work via the NIM role-ordering retry path.
 NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
-    "meta/llama-3.2-11b-vision-instruct",
     "meta/llama-4-maverick-17b-128e-instruct",
-    "moonshotai/kimi-k2-instruct",
-    "meta/llama-3.3-70b-instruct",
-    "qwen/qwen3-next-80b-a3b-instruct",
-    "qwen/qwen3.5-122b-a10b",
-    "qwen/qwen3-next-80b-a3b-thinking",
-    "meta/llama-3.1-70b-instruct",
-    "stepfun-ai/step-3.5-flash",
-    "moonshotai/kimi-k2.6",
-})
-NVIDIA_NIM_TEXT_MODELS: frozenset[str] = frozenset({
-    "meta/llama-3.1-8b-instruct",
-    "upstage/solar-10.7b-instruct",
-})
-NVIDIA_NIM_BASIC_MODELS: frozenset[str] = frozenset({
-    "sarvamai/sarvam-m",
     "google/gemma-2-2b-it",
+    "qwen/qwen3-next-80b-a3b-thinking",
     "meta/llama-3.2-1b-instruct",
+    "upstage/solar-10.7b-instruct",
+    "sarvamai/sarvam-m",
+    "mistralai/mixtral-8x7b-instruct-v0.1",
+    "stockmark/stockmark-2-100b-instruct",
+    "meta/llama-3.2-11b-vision-instruct",
+    "stepfun-ai/step-3.5-flash",
+    "qwen/qwen3-next-80b-a3b-instruct",
+    "meta/llama-3.2-90b-vision-instruct",
+    "meta/llama-3.1-70b-instruct",
+    "moonshotai/kimi-k2.6",
+    "minimaxai/minimax-m2.5",
+    "microsoft/phi-4-mini-instruct",
+    "meta/llama-3.3-70b-instruct",
+    "moonshotai/kimi-k2-instruct",
+    "mistralai/ministral-14b-instruct-2512",
+    "mistralai/devstral-2-123b-instruct-2512",
+    "qwen/qwen3.5-122b-a10b",
+    "mistralai/mistral-nemotron",
+    "mistralai/mixtral-8x22b-instruct-v0.1",
+    "mistralai/mistral-small-4-119b-2603",
+    "google/gemma-3-12b-it",
+    "google/gemma-3-4b-it",
+    "meta/llama-3.1-8b-instruct",
+    "qwen/qwen2.5-coder-32b-instruct",
+    "mistralai/mistral-large-3-675b-instruct-2512",
+    "qwen/qwen3-coder-480b-a35b-instruct",
+    "mistralai/mistral-medium-3.5-128b",
 })
-NVIDIA_NIM_FREE_MODELS: frozenset[str] = (
-    NVIDIA_NIM_TOOL_MODELS | NVIDIA_NIM_TEXT_MODELS | NVIDIA_NIM_BASIC_MODELS
-)
+# Response speeds from testing on 2026-05-08 (model -> ms).
+NVIDIA_NIM_MODEL_SPEEDS: dict[str, str] = {
+    "meta/llama-4-maverick-17b-128e-instruct": "455ms",
+    "google/gemma-2-2b-it": "463ms",
+    "qwen/qwen3-next-80b-a3b-thinking": "465ms",
+    "meta/llama-3.2-1b-instruct": "507ms",
+    "upstage/solar-10.7b-instruct": "514ms",
+    "sarvamai/sarvam-m": "562ms",
+    "mistralai/mixtral-8x7b-instruct-v0.1": "598ms",
+    "stockmark/stockmark-2-100b-instruct": "607ms",
+    "meta/llama-3.2-11b-vision-instruct": "622ms",
+    "stepfun-ai/step-3.5-flash": "619ms",
+    "qwen/qwen3-next-80b-a3b-instruct": "641ms",
+    "meta/llama-3.2-90b-vision-instruct": "696ms",
+    "meta/llama-3.1-70b-instruct": "696ms",
+    "moonshotai/kimi-k2.6": "701ms",
+    "minimaxai/minimax-m2.5": "722ms",
+    "microsoft/phi-4-mini-instruct": "753ms",
+    "meta/llama-3.3-70b-instruct": "869ms",
+    "moonshotai/kimi-k2-instruct": "895ms",
+    "mistralai/ministral-14b-instruct-2512": "1030ms",
+    "mistralai/devstral-2-123b-instruct-2512": "1040ms",
+    "qwen/qwen3.5-122b-a10b": "1107ms",
+    "mistralai/mistral-nemotron": "1154ms",
+    "mistralai/mixtral-8x22b-instruct-v0.1": "1190ms",
+    "mistralai/mistral-small-4-119b-2603": "1477ms",
+    "google/gemma-3-12b-it": "1876ms",
+    "google/gemma-3-4b-it": "1920ms",
+    "meta/llama-3.1-8b-instruct": "2386ms",
+    "qwen/qwen2.5-coder-32b-instruct": "3288ms",
+    "mistralai/mistral-large-3-675b-instruct-2512": "4130ms",
+    "qwen/qwen3-coder-480b-a35b-instruct": "12313ms",
+    "mistralai/mistral-medium-3.5-128b": "16654ms",
+}
+NVIDIA_NIM_FREE_MODELS: frozenset[str] = frozenset(NVIDIA_NIM_TOOL_MODELS)
 
 KIMI_DEFAULT_BASE = "https://api.moonshot.ai/v1"
 # DeepSeek Anthropic-compatible Messages API (not OpenAI ``/v1`` chat completions).

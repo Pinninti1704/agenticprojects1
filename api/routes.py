@@ -4,10 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from loguru import logger
 
 from config.provider_catalog import (
-    NVIDIA_NIM_BASIC_MODELS,
     NVIDIA_NIM_FREE_MODELS,
-    NVIDIA_NIM_TEXT_MODELS,
-    NVIDIA_NIM_TOOL_MODELS,
+    NVIDIA_NIM_MODEL_SPEEDS,
 )
 from config.settings import Settings
 from core.anthropic import get_token_count
@@ -107,16 +105,11 @@ def _append_provider_model_variants(
     *,
     supports_thinking: bool | None = None,
 ) -> None:
-    # Tag NVIDIA NIM models with capability annotation
+    # Tag NVIDIA NIM models with response speed
     tag = ""
     prefix, _, model_name = provider_model_ref.partition("/")
-    if prefix == "nvidia_nim":
-        if model_name in NVIDIA_NIM_TOOL_MODELS:
-            tag = " [tools]"
-        elif model_name in NVIDIA_NIM_TEXT_MODELS:
-            tag = " [text]"
-        elif model_name in NVIDIA_NIM_BASIC_MODELS:
-            tag = " [basic]"
+    if prefix == "nvidia_nim" and model_name in NVIDIA_NIM_MODEL_SPEEDS:
+        tag = f" [{NVIDIA_NIM_MODEL_SPEEDS[model_name]}]"
 
     if supports_thinking is not False:
         _append_unique_model(

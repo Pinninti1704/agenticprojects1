@@ -178,6 +178,49 @@ def clone_body_without_reasoning_content(body: dict[str, Any]) -> dict[str, Any]
     return cloned_body
 
 
+def clone_body_merge_tool_into_user(body: dict[str, Any]) -> dict[str, Any] | None:
+    """Clone and merge role: tool messages into the following role: user blocks.
+
+    Some NIM chat templates (Mistral family) reject role: user appearing
+    directly after role: tool.  Merging each tool result into the user message
+    that follows it produces a valid sequence.
+    """
+    messages = body.get("messages")
+    if not isinstance(messages, list) or len(messages) < 3:
+        return None
+
+    merged = False
+    result: list[dict[str, Any]] = []
+    i = 0
+    while i < len(messages):
+        msg = messages[i]
+        role = msg.get("role", "")
+        if role == "tool" and i + 1 < len(messages):
+            next_msg = messages[i + 1]
+            if next_msg.get("role") == "user":
+                tool_content = msg.get("content", "")
+                user_content = next_msg.get("content", "")
+                parts: list[dict[str, Any]] = []
+                if user_content:
+                    parts.append({"type": "text", "text": str(user_content)})
+                parts.append({
+                    "type": "text",
+                    "text": f"[Tool result: {tool_content}]"
+                })
+                next_msg["content"] = parts
+                merged = True
+                i += 1
+                continue
+        result.append(msg)
+        i += 1
+
+    if not merged:
+        return None
+    cloned_body = deepcopy(body)
+    cloned_body["messages"] = result
+    return cloned_body
+
+
 def build_request_body(
     request_data: Any, nim: NimSettings, *, thinking_enabled: bool
 ) -> dict:
