@@ -183,7 +183,8 @@ def clone_body_merge_tool_into_user(body: dict[str, Any]) -> dict[str, Any] | No
 
     Some NIM chat templates (Mistral family) reject role: user appearing
     directly after role: tool.  Merging each tool result into the user message
-    that follows it produces a valid sequence.
+    that follows it produces a valid sequence. Also removes tool_calls from
+    the preceding assistant message so the template doesn't expect a tool response.
     """
     messages = body.get("messages")
     if not isinstance(messages, list) or len(messages) < 3:
@@ -193,7 +194,7 @@ def clone_body_merge_tool_into_user(body: dict[str, Any]) -> dict[str, Any] | No
     result: list[dict[str, Any]] = []
     i = 0
     while i < len(messages):
-        msg = messages[i]
+        msg = dict(messages[i])
         role = msg.get("role", "")
         if role == "tool" and i + 1 < len(messages):
             next_msg = messages[i + 1]
@@ -207,10 +208,17 @@ def clone_body_merge_tool_into_user(body: dict[str, Any]) -> dict[str, Any] | No
                     "type": "text",
                     "text": f"[Tool result: {tool_content}]"
                 })
-                next_msg["content"] = parts
+                # Replace the upcoming user message with merged content
+                merged_user = dict(next_msg)
+                merged_user["content"] = parts
+                result.append(merged_user)
                 merged = True
-                i += 1
+                i += 2
                 continue
+        # Remove tool_calls from assistant messages that precede a merged tool
+        if role == "assistant" and merged and msg.get("tool_calls"):
+            msg = dict(msg)
+            msg.pop("tool_calls", None)
         result.append(msg)
         i += 1
 
