@@ -492,13 +492,57 @@ HTTP_CONNECT_TIMEOUT=60
 
 ## Verification
 
-### 1. Check server logs
+### 1. Check server terminal logs
 
-Start the server and look for:
+The server prints log lines directly to its terminal. After starting the server with `uv run uvicorn server:app --host 0.0.0.0 --port 8082`, watch for these key log messages:
+
+**Startup log (shown once when the server starts):**
+```
+Starting Claude Code Proxy...
+```
+
+**Model routing log** — shown when a request arrives and a Claude model name gets mapped to your Azure deployment:
 ```
 MODEL MAPPING: 'claude-sonnet-4-6' -> 'DeepSeek-V4-Flash'
-API_REQUEST: ...
-HTTP Response: ... 200 OK
+MODEL DIRECT: 'azure_foundry/DeepSeek-V4-Flash' -> provider='azure_foundry' model='DeepSeek-V4-Flash' thinking=False
+```
+
+**API request log** — shown every time a request is processed:
+```
+API_REQUEST: request_id=req_abc123 model=DeepSeek-V4-Flash messages=1
+```
+
+**Provider conversion logs** — shown when the Azure Foundry provider converts Anthropic format to OpenAI format (requires `LOG_LEVEL=DEBUG` in `.env`):
+```
+AZURE_FOUNDRY_REQUEST: conversion start model=DeepSeek-V4-Flash msgs=1
+AZURE_FOUNDRY_REQUEST: conversion done model=DeepSeek-V4-Flash msgs=1 tools=0
+```
+
+**Error logs** — shown if the request fails:
+```
+Provider Error: error_type=rate_limit_error status_code=429
+Provider Error: error_type=authentication_error status_code=401
+General Error: path=/v1/messages method=POST exc_type=ConnectionError
+```
+
+**Full payload logging** — to see the exact request body sent to Azure (useful for debugging), set in `.env`:
+```bash
+LOG_RAW_API_PAYLOADS=true
+```
+This will print:
+```
+FULL_PAYLOAD [req_abc123]: { ... full request body ... }
+```
+
+**Tip:** If the terminal scrolls too fast, you can also check the log file (configured via `LOG_FILE` in `.env`, defaults to `server.log`):
+```bash
+# Tail the log file in a second terminal
+tail -f server.log
+
+# Or grep for specific keywords
+grep "AZURE_FOUNDRY" server.log
+grep "API_REQUEST" server.log
+grep "Error" server.log
 ```
 
 ### 2. Run a manual smoke test
