@@ -44,9 +44,6 @@ NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
     "mistralai/ministral-14b-instruct-2512",
     "mistralai/devstral-2-123b-instruct-2512",
     "mistralai/mistral-large-3-675b-instruct-2512",
-    # Google
-    "google/gemma-3-4b-it",
-    "google/gemma-3-12b-it",
 })
 # Response speeds from testing on 2026-05-08 (model -> ms).
 NVIDIA_NIM_MODEL_SPEEDS: dict[str, str] = {
@@ -73,8 +70,6 @@ NVIDIA_NIM_MODEL_SPEEDS: dict[str, str] = {
     "mistralai/ministral-14b-instruct-2512": "1030ms",
     "mistralai/devstral-2-123b-instruct-2512": "1040ms",
     "mistralai/mistral-large-3-675b-instruct-2512": "4130ms",
-    "google/gemma-3-4b-it": "1920ms",
-    "google/gemma-3-12b-it": "1876ms",
 }
 NVIDIA_NIM_FREE_MODELS: frozenset[str] = frozenset(NVIDIA_NIM_TOOL_MODELS)
 
