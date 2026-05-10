@@ -13,6 +13,7 @@ from providers.openai_compat import OpenAIChatTransport
 
 from .request import (
     build_request_body,
+    clone_body_merge_tool_into_user,
     clone_body_without_chat_template,
     clone_body_without_reasoning_budget,
     clone_body_without_reasoning_content,
@@ -53,6 +54,12 @@ class NvidiaNimProvider(OpenAIChatTransport):
             error_text = f"{error_text} {json.dumps(error_body, default=str)}"
         error_text = error_text.lower()
 
+        logger.debug(
+            "NIM_RETRY: checking error body type={} str_err_start={}",
+            type(error_body).__name__ if error_body is not None else "None",
+            str(error)[:200],
+        )
+
         if "reasoning_budget" in error_text:
             retry_body = clone_body_without_reasoning_budget(body)
             if retry_body is None:
@@ -78,4 +85,19 @@ class NvidiaNimProvider(OpenAIChatTransport):
             )
             return retry_body
 
+        if "unexpected role" in error_text and "user" in error_text and "tool" in error_text:
+            retry_body = clone_body_merge_tool_into_user(body)
+            if retry_body is None:
+                return None
+            logger.warning(
+                "NIM_STREAM: retrying with merged tool->user messages "
+                "after role ordering error"
+            )
+            return retry_body
+
+        logger.debug(
+            "NIM_RETRY: no retry handler matched for 400 error exc_type={} err_str_start={}",
+            type(error).__name__,
+            str(error)[:300],
+        )
         return None

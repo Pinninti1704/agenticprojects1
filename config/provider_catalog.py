@@ -13,6 +13,61 @@ TransportType = Literal["openai_chat", "anthropic_messages"]
 
 # Default upstream base URLs (also re-exported via :mod:`providers.defaults`)
 NVIDIA_NIM_DEFAULT_BASE = "https://integrate.api.nvidia.com/v1"
+
+# Tested 2026-05-09 — models that responded to /v1/chat/completions.
+# Models tagged in the /model picker as:
+#   [tools] = confirmed tool_calls  [text] = basic chat only  [basic] = untested with tools
+# Mistral/Llama models with [tools] work via the NIM role-ordering retry path.
+NVIDIA_NIM_TOOL_MODELS: frozenset[str] = frozenset({
+    # Confirmed working with chat + tools (tested 2026-05-09)
+    "meta/llama-4-maverick-17b-128e-instruct",
+    "minimaxai/minimax-m2.5",
+    "qwen/qwen3-next-80b-a3b-instruct",
+    "qwen/qwen3-next-80b-a3b-thinking",
+    "stepfun-ai/step-3.5-flash",
+    "moonshotai/kimi-k2-instruct",
+    "qwen/qwen3.5-122b-a10b",
+    "meta/llama-3.3-70b-instruct",
+    "meta/llama-3.1-70b-instruct",
+    "meta/llama-3.1-8b-instruct",
+    "meta/llama-3.2-1b-instruct",
+    "meta/llama-3.2-3b-instruct",
+    "meta/llama-3.2-11b-vision-instruct",
+    "meta/llama-3.2-90b-vision-instruct",
+    # Mistral (role-ordering retry handles the chat template error)
+    "mistralai/mistral-small-4-119b-2603",
+    "mistralai/mixtral-8x7b-instruct-v0.1",
+    "mistralai/mixtral-8x22b-instruct-v0.1",
+    "mistralai/mistral-nemotron",
+    "mistralai/ministral-14b-instruct-2512",
+    "mistralai/mistral-large-3-675b-instruct-2512",
+})
+# Response speeds from testing on 2026-05-09 (model -> ms).
+NVIDIA_NIM_MODEL_SPEEDS: dict[str, str] = {
+    "meta/llama-3.2-1b-instruct": "201ms",
+    "qwen/qwen3-next-80b-a3b-thinking": "309ms",
+    "mistralai/mixtral-8x22b-instruct-v0.1": "379ms",
+    "meta/llama-3.3-70b-instruct": "406ms",
+    "mistralai/ministral-14b-instruct-2512": "409ms",
+    "mistralai/mistral-nemotron": "465ms",
+    "upstage/solar-10.7b-instruct": "495ms",
+    "meta/llama-3.2-11b-vision-instruct": "496ms",
+    "stepfun-ai/step-3.5-flash": "496ms",
+    "mistralai/mistral-small-4-119b-2603": "537ms",
+    "qwen/qwen2.5-coder-32b-instruct": "671ms",
+    "meta/llama-4-maverick-17b-128e-instruct": "704ms",
+    "meta/llama-3.2-3b-instruct": "799ms",
+    "meta/llama-3.2-90b-vision-instruct": "830ms",
+    "qwen/qwen3.5-122b-a10b": "913ms",
+    "mistralai/mixtral-8x7b-instruct-v0.1": "1440ms",
+    "meta/llama-3.1-8b-instruct": "1592ms",
+    "moonshotai/kimi-k2-instruct": "2302ms",
+    "qwen/qwen3-next-80b-a3b-instruct": "3063ms",
+    "minimaxai/minimax-m2.5": "16769ms",
+    "mistralai/mistral-large-3-675b-instruct-2512": "24883ms",
+}
+NVIDIA_NIM_FREE_MODELS: frozenset[str] = frozenset(NVIDIA_NIM_TOOL_MODELS)
+
 KIMI_DEFAULT_BASE = "https://api.moonshot.ai/v1"
 # DeepSeek Anthropic-compatible Messages API (not OpenAI ``/v1`` chat completions).
 DEEPSEEK_ANTHROPIC_DEFAULT_BASE = "https://api.deepseek.com/anthropic"
