@@ -1,0 +1,17 @@
+# Core dependencies
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+requests>=2.31.0
+numpy>=1.24.0
+
+# Data storage
+duckdb>=0.9.0
+
+# Optional: for real trading (not enabled by default)
+# alpaca-trade-api>=0.52
+# ib-insync>=0.9
+
+# Development
+jupyter>=1.0
+ipykernel>=6.0

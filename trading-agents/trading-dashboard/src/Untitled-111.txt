@@ -1,0 +1,102 @@
+For today, the **most “stable” and policy‑aligned LinkedIn MCP option is the one that uses the official LinkedIn API with OAuth (e.g., `linkedin-mcpserver`–style projects)**, not the scraping‑based ones like `mcp-linkedin` that use unofficial libraries. Within the public options, the **LinkedIn MCP Server listed on mcpservers.org / LangDB** is the best balance of features and safety right now. [mcpservers](https://mcpservers.org/servers/felipfr/linkedin-mcpserver)
+
+***
+
+## 1. Most stable LinkedIn MCP server
+
+### Recommended: “LinkedIn MCP Server” (official API + OAuth)
+
+- The **LinkedIn MCP Server** described on mcpservers.org exposes tools like profile search, job search, and messaging using the **official LinkedIn REST API with OAuth 2.0**, not scraping. [mcpservers](https://mcpservers.org/servers/felipfr/linkedin-mcpserver)
+- It’s designed specifically for **Claude Desktop / MCP clients**, with clear instructions for configuring it in `claude_desktop_config.json` and performing OAuth login. [langdb](https://langdb.ai/app/mcp-servers/linkedin-model-context-protoco-a96867b3-67ae-455c-84bb-63b709639168)
+- Because it rides on LinkedIn’s documented API surface and auth flow, its stability is mostly tied to official API contracts, not fragile HTML or private endpoints. [learn.microsoft](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+
+LangDB and mcpservers.org both list this as a production‑ready MCP server with: authentication, rate‑limit handling, and a set of well‑documented tools (profile lookups, job search, etc.). [langdb](https://langdb.ai/app/mcp-servers/linkedin-model-context-protoco-a96867b3-67ae-455c-84bb-63b709639168)
+
+### Less stable / higher‑risk: unofficial scraping MCPs
+
+- **adhikasp/mcp‑linkedin** uses the `linkedin-api` Python library and can require **email/password or cookies** to emulate browser behavior. [github](https://github.com/adhikasp/mcp-linkedin)
+- This relies on LinkedIn’s web UI, not official APIs; it’s more fragile (DOM changes break it), and it clearly states it’s **unofficial** and “use at your own risk.” [github](https://github.com/adhikasp/mcp-linkedin)
+- LinkedIn’s ToS explicitly prohibit automated scraping / reverse‑engineering even though the hiQ case limited some legal arguments; they still aggressively enforce via bans and captchas. [sociavault](https://sociavault.com/blog/linkedin-api-free-2026)
+
+If you care about long‑term stability and account safety, prefer the **OAuth‑based LinkedIn MCP server** and avoid scraping‑style connectors.
+
+***
+
+## 2. How to access LinkedIn’s API (what you must do)
+
+LinkedIn Premium is **not** an API entitlement. To use official APIs (including via MCP), you must go through LinkedIn’s developer flow. [unipile](https://www.unipile.com/linkedin-api-a-comprehensive-guide-to-integration/)
+
+### Steps to get API access
+
+1. **Create a LinkedIn Developer account and app**  
+   - Go to the LinkedIn Developer Portal, create a new application, and associate it with either your personal LinkedIn or, better, a company page. [learn.microsoft](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+   - You receive a **Client ID and Client Secret** for OAuth.  
+
+2. **Request “Products” / permissions**  
+   - LinkedIn groups APIs into “Products” like Sign In with LinkedIn, Share on LinkedIn, Marketing Developer Platform, Sales Navigator API, etc. [connectsafely](https://connectsafely.ai/articles/linkedin-api-complete-guide-2026)
+   - Only a small set of “open” products (e.g., basic profile/sign‑in, email address, basic sharing) can be enabled self‑service. [learn.microsoft](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+   - All richer products (advanced profile data, marketing/ads, Sales Navigator, Recruiter, Learning, extensive analytics) require **partner approval** and a business use case; individuals with Premium rarely get this by default. [getphyllo](https://www.getphyllo.com/post/linkedin-api-paid-vs-free-plans-iv)
+
+3. **Implement OAuth 2.0**  
+   - You must implement the LinkedIn OAuth flow (Authorization Code Grant) in your MCP server or backend:  
+     - Redirect user to LinkedIn’s consent page with your app’s client ID and requested scopes.  
+     - Receive an authorization code on your redirect URI.  
+     - Exchange the code for an **access token** (and possibly refresh token). [unipile](https://www.unipile.com/linkedin-api-a-comprehensive-guide-to-integration/)
+   - MCP servers like the LinkedIn MCP Server wrap this for you and just require you to provide the client ID/secret and then follow a login link once. [mcpservers](https://mcpservers.org/servers/felipfr/linkedin-mcpserver)
+
+4. **Call only the endpoints allowed by your scopes**  
+   - For example, if you only have the “r_liteprofile” and “r_emailaddress” scopes, you can get basic profile and email for the authenticated user, nothing more. [learn.microsoft](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+   - Marketing APIs, recruiter APIs, or bulk profile search require special products and are not accessible to regular apps. [connectsafely](https://connectsafely.ai/articles/linkedin-api-complete-guide-2026)
+
+***
+
+## 3. Key limitations of the LinkedIn API (2026 reality)
+
+Recent write‑ups and dev stories all converge on the same picture: **LinkedIn’s API is very locked‑down**. [linkedin](https://www.linkedin.com/posts/mesum-bin-shaukat_i-explored-linkedins-api-for-a-project-and-activity-7431307110371500032-N_oU)
+
+### a) Closed partner program for anything “interesting”
+
+- Rich APIs (feed analytics, full profile search, connections graph, InMail, Sales Navigator data, Recruiter, etc.) are **partner‑only**, often behind strict vetting and commercial contracts. [getphyllo](https://www.getphyllo.com/post/how-linkedin-api-restrictions-are-reshaping-b2b-influencer-marketing-in-2026)
+- Premium subscription does **not** automatically entitle you to these APIs; you still need LinkedIn to approve your app and use case. [sociavault](https://sociavault.com/blog/linkedin-api-free-2026)
+
+### b) Narrow open scope for standard developers
+
+For most devs, even with Premium, you realistically get:
+
+- **Authentication / sign‑in** and basic profile fields (name, headline, profile picture, ID). [learn.microsoft](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)
+- Email address (if consented).  
+- Basic **content sharing** (posting on behalf of the authenticated user, again with explicit consent). [unipile](https://www.unipile.com/linkedin-api-a-comprehensive-guide-to-integration/)
+
+You *do not* get, via official API:
+
+- Arbitrary **profile scraping** or “search all profiles by keyword and extract data”.  
+- Full connection graph, full messaging access, or bulk data export.  
+- Unlimited job scraping or company graph extraction.  
+
+Those are explicitly called out as **restricted** or unsupported for generic apps. [getphyllo](https://www.getphyllo.com/post/how-linkedin-api-restrictions-are-reshaping-b2b-influencer-marketing-in-2026)
+
+### c) Rate limits & data usage constraints
+
+- The official docs and 2026 overviews emphasize **strict rate limits** per app/user and per endpoint, which can be tightened further if abuse is detected. [connectsafely](https://connectsafely.ai/articles/linkedin-api-complete-guide-2026)
+- There are **data storage and caching rules**, often requiring that you don’t store some data subsets beyond a certain time and always respect user revocation; some marketing endpoints require data deletion sync when users revoke consent. [getphyllo](https://www.getphyllo.com/post/linkedin-api-paid-vs-free-plans-iv)
+
+### d) Anti‑scraping enforcement
+
+- Even though courts have limited LinkedIn’s use of anti‑scraping laws against some third‑party scrapers (hiQ), LinkedIn continues to treat **automated scraping as a ToS violation** and uses technical measures (IP blocking, CAPTCHAs, account lockouts) against it. [sociavault](https://sociavault.com/blog/linkedin-api-free-2026)
+- MCP servers that work by scraping HTML or using private APIs are at higher risk of breakage or causing account issues, which is why they’re not “stable” options for long‑term use. [github](https://github.com/adhikasp/mcp-linkedin)
+
+***
+
+## 4. Practical recommendation for you
+
+Given all this, for a **robust, MCP‑driven LinkedIn integration**:
+
+1. Use the **OAuth‑based LinkedIn MCP Server** (as listed on mcpservers.org / LangDB) rather than scraping MCPs; it’s more stable and respects LinkedIn’s official API contracts. [langdb](https://langdb.ai/app/mcp-servers/linkedin-model-context-protoco-a96867b3-67ae-455c-84bb-63b709639168)
+2. Create a **LinkedIn Developer app**, enable only the permitted products (Sign In, basic profile, sharing), and configure the MCP server with your **client ID/secret**. [connectsafely](https://connectsafely.ai/articles/linkedin-api-complete-guide-2026)
+3. Design your agent workflows around **what the API actually allows**:  
+   - Enrich your own data, help draft posts, analyze your own engagement, manage your own application workflow—rather than trying to scrape or bulk‑harvest other people’s data. [getphyllo](https://www.getphyllo.com/post/linkedin-api-paid-vs-free-plans-iv)
+
+If you tell me exactly what you want your agent to do on LinkedIn (e.g., “help me draft/apply to jobs”, “log and summarize my posts & replies”, “maintain a lead list only from people who messaged me”), I can map that to:  
+
+- Which scopes/products you should request in your LinkedIn app.  
+- Which MCP tools to enable or build.

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import { Trash2 } from 'lucide-react'
 import { useQuestionStore } from '@/stores/questionStore'
 import { Badge } from '@/components/ui/Badge'
 import type { QuestionDifficulty } from '@/types/question'
@@ -13,7 +15,15 @@ const difficultyVariant = (d: QuestionDifficulty) => {
 }
 
 export function QuestionList({ topicId }: QuestionListProps) {
-  const questions = useQuestionStore((s) => s.getQuestionsForTopic(topicId))
+  const acceptedQuestions = useQuestionStore((s) => s.acceptedQuestions)
+  const deleteAcceptedQuestion = useQuestionStore((s) => s.deleteAcceptedQuestion)
+  const questions = useMemo(() => acceptedQuestions[topicId] || [], [acceptedQuestions, topicId])
+
+  const grouped = useMemo(() => ({
+    easy: questions.filter((q) => q.difficulty === 'easy'),
+    medium: questions.filter((q) => q.difficulty === 'medium'),
+    hard: questions.filter((q) => q.difficulty === 'hard'),
+  }), [questions])
 
   if (questions.length === 0) {
     return (
@@ -21,12 +31,6 @@ export function QuestionList({ topicId }: QuestionListProps) {
         No accepted questions yet. Scrape and accept questions to build your question bank.
       </div>
     )
-  }
-
-  const grouped = {
-    easy: questions.filter((q) => q.difficulty === 'easy'),
-    medium: questions.filter((q) => q.difficulty === 'medium'),
-    hard: questions.filter((q) => q.difficulty === 'hard'),
   }
 
   return (
@@ -41,8 +45,17 @@ export function QuestionList({ topicId }: QuestionListProps) {
             </div>
             <div className="space-y-1.5">
               {grouped[diff].map((q) => (
-                <div key={q.id} className="bg-surface rounded-lg border border-border p-2.5">
-                  <p className="text-sm text-text">{q.text}</p>
+                <div key={q.id} className="bg-surface rounded-lg border border-border p-2.5 group">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm text-text">{q.text}</p>
+                    <button
+                      onClick={() => deleteAcceptedQuestion(topicId, q.id)}
+                      className="text-text-muted hover:text-danger opacity-0 group-hover:opacity-100 transition-all p-1 shrink-0"
+                      title="Remove question"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="info">{q.type}</Badge>
                   </div>

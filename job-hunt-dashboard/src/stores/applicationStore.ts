@@ -17,15 +17,20 @@ interface ApplicationActions {
 
 const STORAGE_KEY = 'applications'
 
+function appsEqual(a: JobApplication[], b: JobApplication[]): boolean {
+  if (a.length !== b.length) return false
+  return a.every((item, i) => item.id === b[i].id && item.stage === b[i].stage)
+}
+
 export const useApplicationStore = create<ApplicationState & ApplicationActions>((set, get) => ({
   ...loadFromStorage<ApplicationState>(STORAGE_KEY, { applications: [] }),
 
   addApplication: (app) => {
     const newApp: JobApplication = { ...app, id: generateId(), createdAt: nowISO(), updatedAt: nowISO() }
     set((s) => {
-      const next = { applications: [...s.applications, newApp] }
-      saveToStorage(STORAGE_KEY, next)
-      return next
+      const applications = [...s.applications, newApp]
+      saveToStorage(STORAGE_KEY, { applications })
+      return { applications }
     })
   },
 
@@ -34,6 +39,7 @@ export const useApplicationStore = create<ApplicationState & ApplicationActions>
       const applications = s.applications.map((a) =>
         a.id === id ? { ...a, ...updates, updatedAt: nowISO() } : a
       )
+      if (appsEqual(s.applications, applications)) return {}
       saveToStorage(STORAGE_KEY, { applications })
       return { applications }
     })
@@ -42,6 +48,7 @@ export const useApplicationStore = create<ApplicationState & ApplicationActions>
   deleteApplication: (id) => {
     set((s) => {
       const applications = s.applications.filter((a) => a.id !== id)
+      if (appsEqual(s.applications, applications)) return {}
       saveToStorage(STORAGE_KEY, { applications })
       return { applications }
     })
@@ -52,6 +59,7 @@ export const useApplicationStore = create<ApplicationState & ApplicationActions>
       const applications = s.applications.map((a) =>
         a.id === id ? { ...a, stage, updatedAt: nowISO() } : a
       )
+      if (appsEqual(s.applications, applications)) return {}
       saveToStorage(STORAGE_KEY, { applications })
       return { applications }
     })

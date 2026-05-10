@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip,
 } from 'recharts'
@@ -7,13 +8,13 @@ export function ConfidenceRadar() {
   const topics = useTopicStore((s) => s.topics)
   const categories = useTopicStore((s) => s.categories)
 
-  const data = categories.map((cat) => {
+  const data = useMemo(() => categories.map((cat) => {
     const catTopics = topics.filter((t) => t.categoryId === cat.id)
     const avg = catTopics.length > 0
       ? catTopics.reduce((sum, t) => sum + t.confidence, 0) / catTopics.length
       : 0
     return { category: cat.name, value: +avg.toFixed(1), fullMark: 5 }
-  })
+  }), [topics, categories])
 
   if (topics.length === 0) {
     return (

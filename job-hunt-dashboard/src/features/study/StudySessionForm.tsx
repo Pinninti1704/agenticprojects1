@@ -2,20 +2,22 @@ import { useState } from 'react'
 import { Clock, Plus } from 'lucide-react'
 import { useStudyStore } from '@/stores/studyStore'
 import { useTopicStore } from '@/stores/topicStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
 import { useToast } from '@/components/ui/Toast'
-import { STUDY_TIME_SLOTS } from '@/lib/constants'
 import { formatDuration } from '@/lib/utils'
 
 export function StudySessionForm() {
   const addSession = useStudyStore((s) => s.addSession)
   const topics = useTopicStore((s) => s.topics)
+  const studyTimeSlots = useSettingsStore((s) => s.app.studyTimeSlots)
+  const defaultDuration = useSettingsStore((s) => s.app.defaultStudyDuration)
   const { addToast } = useToast()
   const [showForm, setShowForm] = useState(false)
   const [topicId, setTopicId] = useState(topics[0]?.id || '')
-  const [duration, setDuration] = useState(30)
+  const [duration, setDuration] = useState(defaultDuration)
   const [notes, setNotes] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,7 +53,7 @@ export function StudySessionForm() {
       <div>
         <p className="text-xs text-text-muted mb-2">Duration</p>
         <div className="flex flex-wrap gap-2">
-          {STUDY_TIME_SLOTS.map((slot) => (
+          {studyTimeSlots.map((slot) => (
             <button
               key={slot}
               type="button"

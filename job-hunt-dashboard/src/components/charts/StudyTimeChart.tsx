@@ -1,10 +1,11 @@
+import { useMemo } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useStudyStore } from '@/stores/studyStore'
 
 export function StudyTimeChart() {
   const sessions = useStudyStore((s) => s.sessions)
 
-  const data = Array.from({ length: 30 }, (_, i) => {
+  const data = useMemo(() => Array.from({ length: 30 }, (_, i) => {
     const d = new Date()
     d.setDate(d.getDate() - (29 - i))
     const dateStr = d.toISOString().slice(0, 10)
@@ -15,7 +16,7 @@ export function StudyTimeChart() {
       date: dateStr.slice(5),
       minutes,
     }
-  })
+  }), [sessions])
 
   if (sessions.length === 0) {
     return (

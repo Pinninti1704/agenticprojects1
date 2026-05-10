@@ -1,15 +1,18 @@
+import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useApplicationStore } from '@/stores/applicationStore'
 import { APPLICATION_STAGES, STAGE_LABELS } from '@/types/application'
 
 export function ApplicationFunnel() {
   const applications = useApplicationStore((s) => s.applications)
-  const stages = APPLICATION_STAGES.filter((s) => s !== 'rejected' && s !== 'withdrawn')
 
-  const data = stages.map((stage) => ({
-    stage: STAGE_LABELS[stage].split(' ')[0],
-    count: applications.filter((a) => a.stage === stage).length,
-  }))
+  const data = useMemo(() => {
+    const stages = APPLICATION_STAGES.filter((s) => s !== 'rejected' && s !== 'withdrawn')
+    return stages.map((stage) => ({
+      stage: STAGE_LABELS[stage].split(' ')[0],
+      count: applications.filter((a) => a.stage === stage).length,
+    }))
+  }, [applications])
 
   if (applications.length === 0) {
     return (

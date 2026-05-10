@@ -1,17 +1,22 @@
+import { useMemo } from 'react'
 import { useDeadlineStore } from '@/stores/deadlineStore'
 import { useTopicStore } from '@/stores/topicStore'
 import { daysUntil, isOverdue } from '@/lib/utils'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import type { TabType } from '@/components/layout/Sidebar'
 
-export function DeadlineList() {
-  const deadlines = useDeadlineStore((s) => s.deadlines)
+export function DeadlineList({ onNavigate }: { onNavigate?: (tab: TabType) => void }) {
+  const setSelectedTopicId = useTopicStore((s) => s.setSelectedTopicId)
+  const allDeadlines = useDeadlineStore((s) => s.deadlines)
   const completeDeadline = useDeadlineStore((s) => s.completeDeadline)
   const topics = useTopicStore((s) => s.topics)
 
-  const sorted = [...deadlines]
-    .filter((d) => d.status === 'active')
-    .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+  const sorted = useMemo(() => {
+    return allDeadlines
+      .filter((d) => d.status === 'active')
+      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+  }, [allDeadlines])
 
   if (sorted.length === 0) {
     return (
@@ -29,18 +34,21 @@ export function DeadlineList() {
         const overdue = isOverdue(d.dueDate)
         return (
           <div key={d.id} className="flex items-center justify-between bg-surface rounded-lg border border-border p-3">
-            <div className="flex items-center gap-3">
+            <div
+              onClick={() => { setSelectedTopicId(d.topicId); onNavigate?.('topics') }}
+              className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
+            >
               <div className={`w-2 h-2 rounded-full ${overdue ? 'bg-danger' : remaining <= 3 ? 'bg-warning' : 'bg-success'}`} />
               <div>
                 <p className="text-sm text-text">{topic?.name || 'Unknown'}</p>
                 <p className="text-xs text-text-muted">{new Date(d.dueDate).toLocaleDateString()}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <Badge variant={overdue ? 'danger' : remaining <= 3 ? 'warning' : 'success'}>
                 {overdue ? 'Overdue' : `${remaining}d left`}
               </Badge>
-              <Button size="sm" variant="ghost" onClick={() => completeDeadline(d.id)}>Done</Button>
+              <Button size="sm" variant="ghost" onClick={() => { completeDeadline(d.id); onNavigate?.('study') }}>Done</Button>
             </div>
           </div>
         )
