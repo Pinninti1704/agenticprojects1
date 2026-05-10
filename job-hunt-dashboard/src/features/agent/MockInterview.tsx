@@ -1,35 +1,18 @@
-import { useState } from 'react'
-import { Send, Sparkles, RotateCcw } from 'lucide-react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { Send, Sparkles, RotateCcw, Download, Timer, SkipForward } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
+import { ProgressBar } from '@/components/ui/ProgressBar'
 import { useToast } from '@/components/ui/Toast'
+import { ErrorBoundary } from '@/components/layout/ErrorBoundary'
 import { useAgentStore } from '@/stores/agentStore'
-import type { MockInterviewSession, InterviewQuestion } from '@/types/agent'
-
-function generateQuestions(jdTitle: string): InterviewQuestion[] {
-  const base = [
-    { question: `Tell me about your experience with ${jdTitle.replace(/senior|lead|junior|principal/gi, '').trim() || 'software development'}`, type: 'behavioral' as const, difficulty: 'easy' as const },
-    { question: 'Describe a challenging technical problem you solved recently.', type: 'behavioral' as const, difficulty: 'medium' as const },
-    { question: `How would you design a scalable system for ${jdTitle.includes('full') ? 'a real-time collaborative editor' : 'handling millions of daily requests'}?`, type: 'technical' as const, difficulty: 'hard' as const },
-    { question: 'Tell me about a time you disagreed with a technical decision.', type: 'behavioral' as const, difficulty: 'medium' as const },
-    { question: 'How do you stay updated with industry trends and new technologies?', type: 'situational' as const, difficulty: 'easy' as const },
-    { question: 'Walk me through your approach to debugging a production issue.', type: 'situational' as const, difficulty: 'medium' as const },
-  ]
-  return base.map((q, i) => ({ ...q, id: `q-${i}` }))
-}
-
-function generateFeedback(answer: string): string {
-  const len = answer.length
-  if (len < 50) return 'Your answer is quite brief. Try expanding with a specific example using the STAR method (Situation, Task, Action, Result) to make your response more compelling.'
-  if (len < 150) return 'Good start! Consider adding more concrete metrics or outcomes to strengthen your answer. Interviewers respond well to quantified results.'
-  if (!answer.includes('because') && !answer.includes('since') && !answer.includes('therefore')) {
-    return 'Solid response. To make it even stronger, add reasoning behind your decisions — explaining the "why" demonstrates deeper understanding.'
-  }
-  return 'Great answer! You provided a detailed response with clear reasoning. This demonstrates the level of depth interviewers are looking for.'
-}
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useAnalyticsStore } from '@/stores/analyticsStore'
+import { createAiProvider } from '@/services/ai'
+import type { MockInterviewSession, InterviewQuestion, AnswerScore } from '@/types/agent'
 
 const difficultyColor = (d: string) => {
   if (d === 'easy') return 'success' as const
@@ -37,18 +20,97 @@ const difficultyColor = (d: string) => {
   return 'danger' as const
 }
 
-export function MockInterview() {
+function scoreColor(value: number): string {
+  if (value >= 80) return 'bg-success'
+  if (value >= 50) return 'bg-warning'
+  return 'bg-danger'
+}
+
+function ScoreBar({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-text-muted w-24 shrink-0">{label}</span>
+      <div className="flex-1 bg-surface-2 rounded-full h-2">
+        <div className={`h-2 rounded-full transition-all ${scoreColor(value)}`} style={{ width: `${value}%` }} />
+      </div>
+      <span className={`text-xs font-medium w-8 text-right ${value >= 80 ? 'text-success' : value >= 50 ? 'text-warning' : 'text-danger'}`}>{value}</span>
+    </div>
+  )
+}
+
+function formatTimestamp(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  } catch { return iso }
+}
+
+function exportToMarkdown(session: MockInterviewSession): string {
+  const lines = [`# Mock Interview: ${session.jdTitle}`, `Date: ${formatTimestamp(session.startedAt)}`, '']
+  session.questions.forEach((q, i) => {
+    lines.push(`## Q${i + 1}: ${q.question}`, `Difficulty: ${q.difficulty} | Type: ${q.type}`, '')
+    if (q.answer) lines.push(`**Answer:** ${q.answer}`, '')
+    if (q.feedback) lines.push(`**Feedback:**`, `- Structure: ${q.feedback.structure}/100`, `- Depth: ${q.feedback.depth}/100`, `- Quantifiable: ${q.feedback.quantifiable}/100`, `- Overall: ${q.feedback.overall}/100`, '')
+  })
+  return lines.join('\n')
+}
+
+function exportToJson(session: MockInterviewSession): string {
+  return JSON.stringify(session, null, 2)
+}
+
+function MockInterviewInner() {
   const addSession = useAgentStore((s) => s.addSession)
   const updateSession = useAgentStore((s) => s.updateSession)
+  const sessions = useAgentStore((s) => s.sessions)
+  const settings = useSettingsStore((s) => s.app)
   const { addToast } = useToast()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [jdTitle, setJdTitle] = useState('')
   const [session, setSession] = useState<MockInterviewSession | null>(null)
   const [currentAnswer, setCurrentAnswer] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [timeLeft, setTimeLeft] = useState<number | null>(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
+  }, [])
+
+  useEffect(() => {
+    return () => clearTimer()
+  }, [clearTimer])
+
+  useEffect(() => {
+    if (textareaRef.current && session && !session.completedAt) {
+      textareaRef.current.focus()
+    }
+  }, [session?.currentIndex, session?.completedAt])
+
+  const startTimer = useCallback((limitSeconds: number) => {
+    clearTimer()
+    setTimeLeft(limitSeconds)
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev === null || prev <= 1) {
+          clearTimer()
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }, [clearTimer])
+
+  useEffect(() => {
+    if (timeLeft === 0 && session && !session.completedAt && settings.mockInterviewTimedMode) {
+      handleSubmit()
+    }
+  }, [timeLeft])
+
+  const provider = createAiProvider(settings.agentProvider)
 
   const handleStart = () => {
     if (!jdTitle.trim()) return
-    const questions = generateQuestions(jdTitle)
+    const questions = provider.generateInterviewQuestions(jdTitle.trim(), settings.mockInterviewQuestionCount)
     const newSession: MockInterviewSession = {
       id: `session-${Date.now()}`,
       jdTitle: jdTitle.trim(),
@@ -58,14 +120,17 @@ export function MockInterview() {
     }
     setSession(newSession)
     addSession(newSession)
+    if (settings.mockInterviewTimedMode) startTimer(settings.mockInterviewTimeLimit)
+    useAnalyticsStore.getState().trackEvent('mock_interview_started', { jdTitle: jdTitle.trim(), questionCount: questions.length })
     addToast('success', `Mock interview started for ${jdTitle.trim()}`)
   }
 
   const handleSubmit = async () => {
     if (!session || !currentAnswer.trim()) return
+    clearTimer()
     setSubmitting(true)
     await new Promise((r) => setTimeout(r, 800))
-    const feedback = generateFeedback(currentAnswer)
+    const feedback = provider.generateFeedback(session.questions[session.currentIndex].question, currentAnswer)
     const updatedQuestions = [...session.questions]
     updatedQuestions[session.currentIndex] = {
       ...updatedQuestions[session.currentIndex],
@@ -74,7 +139,7 @@ export function MockInterview() {
     }
     const nextIndex = session.currentIndex + 1
     const isComplete = nextIndex >= updatedQuestions.length
-    const updated = {
+    const updated: MockInterviewSession = {
       ...session,
       questions: updatedQuestions,
       currentIndex: isComplete ? session.currentIndex : nextIndex,
@@ -84,41 +149,59 @@ export function MockInterview() {
     updateSession(session.id, updated)
     setCurrentAnswer('')
     setSubmitting(false)
+    useAnalyticsStore.getState().trackEvent(isComplete ? 'mock_interview_completed' : 'mock_interview_answer_submitted', {
+      sessionId: session.id,
+      questionIndex: session.currentIndex,
+      answerLength: currentAnswer.length,
+    })
+    if (settings.mockInterviewTimedMode && !isComplete) startTimer(settings.mockInterviewTimeLimit)
   }
 
   const handleReset = () => {
+    clearTimer()
     setSession(null)
     setCurrentAnswer('')
     setJdTitle('')
+    setTimeLeft(null)
+  }
+
+  const formatTime = (seconds: number): string => {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
   }
 
   if (!session) {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-text-muted">Start a mock interview by entering a job title. AI will generate relevant questions and provide feedback on your answers.</p>
+        <p className="text-sm text-text-muted">Start a mock interview by entering a job title. AI will generate relevant questions and provide structured feedback on your answers.</p>
         <Input
           value={jdTitle}
           onChange={(e) => setJdTitle(e.target.value)}
           placeholder="e.g. Senior Software Engineer"
           onKeyDown={(e) => e.key === 'Enter' && handleStart()}
         />
-        <Button onClick={handleStart} disabled={!jdTitle.trim()}>
-          <Sparkles className="w-3.5 h-3.5" /> Start Interview
-        </Button>
-        {useAgentStore.getState().sessions.length > 0 && (
+        <div className="flex items-center gap-2">
+          <Button onClick={handleStart} disabled={!jdTitle.trim()}>
+            <Sparkles className="w-3.5 h-3.5" /> Start Interview
+          </Button>
+          <span className="text-xs text-text-muted">{settings.mockInterviewQuestionCount} questions | {settings.mockInterviewTimedMode ? `${settings.mockInterviewTimeLimit}s per question` : 'untimed'}</span>
+        </div>
+        {sessions.length > 0 && (
           <div className="pt-4">
             <p className="text-xs text-text-muted mb-2 uppercase tracking-wider">Past Sessions</p>
-            <div className="space-y-2">
-              {useAgentStore.getState().sessions.slice().reverse().slice(0, 5).map((s) => (
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {[...sessions].reverse().slice(0, 10).map((s) => (
                 <button
                   key={s.id}
-                  onClick={() => setSession(s)}
+                  onClick={() => { setSession(s); setCurrentAnswer('') }}
                   className="w-full text-left bg-surface rounded-lg border border-border p-3 text-sm text-text hover:border-primary/50 transition-colors"
                 >
                   <span className="font-medium">{s.jdTitle}</span>
                   <span className="text-xs text-text-muted ml-2">
                     {s.completedAt ? '(Completed)' : `${s.currentIndex}/${s.questions.length} answered`}
                   </span>
+                  <span className="text-xs text-text-muted block">{formatTimestamp(s.startedAt)}</span>
                 </button>
               ))}
             </div>
@@ -144,11 +227,27 @@ export function MockInterview() {
         </Button>
       </div>
 
+      <ProgressBar value={Math.round((answeredCount / session.questions.length) * 100)} />
+
       {isComplete ? (
         <div className="space-y-4">
           <div className="bg-success/10 border border-success/30 rounded-lg p-4 text-center">
             <p className="text-lg font-bold text-success">Interview Complete!</p>
             <p className="text-sm text-text-muted mt-1">Review your answers and feedback below.</p>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <Button size="sm" variant="secondary" onClick={() => { navigator.clipboard.writeText(exportToMarkdown(session)); addToast('success', 'Copied as Markdown!') }}>
+                <Download className="w-3.5 h-3.5" /> Copy Markdown
+              </Button>
+              <Button size="sm" variant="secondary" onClick={() => {
+                const blob = new Blob([exportToJson(session)], { type: 'application/json' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a'); a.href = url; a.download = `mock-interview-${session.jdTitle.replace(/\s+/g, '-')}.json`; a.click()
+                URL.revokeObjectURL(url)
+                addToast('success', 'Exported as JSON!')
+              }}>
+                <Download className="w-3.5 h-3.5" /> Export JSON
+              </Button>
+            </div>
           </div>
           {session.questions.map((q, i) => (
             <div key={q.id} className="bg-surface border border-border rounded-lg p-4 space-y-2">
@@ -161,13 +260,27 @@ export function MockInterview() {
               {q.answer && (
                 <div className="bg-surface-2 rounded-lg p-3 mt-2">
                   <p className="text-xs text-text-muted mb-1">Your answer:</p>
-                  <p className="text-sm text-text">{q.answer}</p>
+                  <p className="text-sm text-text whitespace-pre-wrap">{q.answer}</p>
                 </div>
               )}
               {q.feedback && (
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
-                  <p className="text-xs text-primary mb-1">Feedback:</p>
-                  <p className="text-sm text-text">{q.feedback}</p>
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 space-y-2">
+                  <p className="text-xs text-primary mb-1">Feedback Scores:</p>
+                  <ScoreBar label="Structure" value={q.feedback.structure} />
+                  <ScoreBar label="Depth" value={q.feedback.depth} />
+                  <ScoreBar label="Quantifiable" value={q.feedback.quantifiable} />
+                  <div className="border-t border-primary/10 pt-2 mt-2">
+                    <ScoreBar label="Overall" value={q.feedback.overall} />
+                  </div>
+                  {q.feedback.suggestions.length > 0 && (
+                    <ul className="space-y-1 mt-2">
+                      {q.feedback.suggestions.map((s, si) => (
+                        <li key={si} className="text-xs text-text-muted flex items-start gap-1.5">
+                          <span className="text-primary mt-0.5">•</span>{s}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
             </div>
@@ -176,31 +289,57 @@ export function MockInterview() {
       ) : (
         <Card title={`Question ${session.currentIndex + 1} of ${session.questions.length}`}>
           <div className="space-y-4">
+            {settings.mockInterviewTimedMode && timeLeft !== null && (
+              <div className={`flex items-center justify-end gap-2 text-sm font-mono ${timeLeft <= 30 ? 'text-danger animate-pulse' : 'text-text-muted'}`}>
+                <Timer className="w-3.5 h-3.5" />
+                {formatTime(timeLeft)}
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <Badge variant={difficultyColor(currentQ.difficulty)}>{currentQ.difficulty}</Badge>
               <Badge variant="info">{currentQ.type}</Badge>
             </div>
             <p className="text-base text-text font-medium">{currentQ.question}</p>
             <Textarea
+              ref={textareaRef}
               value={currentAnswer}
               onChange={(e) => setCurrentAnswer(e.target.value)}
               rows={4}
               placeholder="Type your answer here..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault()
+                  handleSubmit()
+                }
+              }}
             />
-            <div className="flex justify-end gap-3">
-              <Button variant="secondary" size="sm" onClick={() => {
-                const next = { ...session, currentIndex: Math.min(session.currentIndex + 1, session.questions.length - 1) }
-                setSession(next)
-              }} disabled={session.currentIndex >= session.questions.length - 1}>
-                Skip
-              </Button>
-              <Button onClick={handleSubmit} loading={submitting} disabled={!currentAnswer.trim()}>
-                <Send className="w-3.5 h-3.5" /> Submit
-              </Button>
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-text-muted">Ctrl+Enter to submit</span>
+              <div className="flex gap-3">
+                <Button variant="secondary" size="sm" onClick={() => {
+                  const next = { ...session, currentIndex: Math.min(session.currentIndex + 1, session.questions.length - 1) }
+                  setSession(next)
+                  setCurrentAnswer('')
+                  if (settings.mockInterviewTimedMode) startTimer(settings.mockInterviewTimeLimit)
+                }} disabled={session.currentIndex >= session.questions.length - 1}>
+                  <SkipForward className="w-3.5 h-3.5" /> Skip
+                </Button>
+                <Button onClick={handleSubmit} loading={submitting} disabled={!currentAnswer.trim()}>
+                  <Send className="w-3.5 h-3.5" /> Submit
+                </Button>
+              </div>
             </div>
           </div>
         </Card>
       )}
     </div>
+  )
+}
+
+export function MockInterview() {
+  return (
+    <ErrorBoundary>
+      <MockInterviewInner />
+    </ErrorBoundary>
   )
 }
