@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Plus, Sparkles, Trash2, Star, Search, Edit3, Download, CheckSquare } from 'lucide-react'
+import { useState, useMemo, useEffect } from 'react'
+import { Plus, Sparkles, Trash2, Star, Search, Edit3, Download, CheckSquare, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
@@ -60,6 +60,9 @@ function StoryBankInner() {
   const [editValue, setEditValue] = useState('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [scores, setScores] = useState<Record<string, { situation: number; task: number; action: number; result: number; overall: number }>>({})
+  const [lastClickedId, setLastClickedId] = useState<string | null>(null)
+  const [bulkTagInput, setBulkTagInput] = useState('')
+  const [showBulkTagInput, setShowBulkTagInput] = useState(false)
 
   const allTags = useMemo(() => {
     const all = new Set<string>()
@@ -150,12 +153,30 @@ function StoryBankInner() {
     addToast('success', 'Story updated!')
   }
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (id: string, isShift: boolean = false) => {
+    if (isShift && lastClickedId && lastClickedId !== id) {
+      const ids = filtered.map((s) => s.id)
+      const lastIdx = ids.indexOf(lastClickedId)
+      const curIdx = ids.indexOf(id)
+      if (lastIdx !== -1 && curIdx !== -1) {
+        const [start, end] = lastIdx < curIdx ? [lastIdx, curIdx] : [curIdx, lastIdx]
+        setSelectedIds((prev) => {
+          const next = new Set(prev)
+          for (let i = start; i <= end; i++) {
+            next.add(ids[i])
+          }
+          return next
+        })
+        setLastClickedId(id)
+        return
+      }
+    }
     setSelectedIds((prev) => {
       const next = new Set(prev)
       if (next.has(id)) next.delete(id); else next.add(id)
       return next
     })
+    setLastClickedId(id)
   }
 
   const handleBulkDelete = () => {
@@ -178,6 +199,48 @@ function StoryBankInner() {
     addToast('success', 'Copied as Markdown!')
   }
 
+  // Select all filtered stories
+  const handleSelectAll = () => {
+    setSelectedIds(new Set(filtered.map((s) => s.id)))
+  }
+
+  // Deselect all stories
+  const handleDeselectAll = () => {
+    setSelectedIds(new Set())
+  }
+
+  // Bulk tag: add a tag to all selected stories
+  const handleBulkTagApply = () => {
+    const tag = bulkTagInput.trim()
+    if (!tag) return
+    selectedIds.forEach((id) => {
+      const story = stories.find((s) => s.id === id)
+      if (story && !story.tags.includes(tag)) {
+        updateStory(id, { tags: [...story.tags, tag] })
+      }
+    })
+    useAnalyticsStore.getState().trackEvent('story_bulk_tagged', { tag, count: selectedIds.size })
+    addToast('success', `Tagged ${selectedIds.size} stories with "${tag}"`)
+    setBulkTagInput('')
+    setShowBulkTagInput(false)
+  }
+
+  // Escape key cancels inline editing
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        cancelEdit()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  // Separate favorites and others for pinned section
+  const favIds = new Set(storyFavorites)
+  const pinnedStories = filtered.filter((s) => favIds.has(s.id))
+  const unpinnedStories = filtered.filter((s) => !favIds.has(s.id))
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 flex-wrap">
@@ -190,6 +253,15 @@ function StoryBankInner() {
         <span className="text-xs text-text-muted">{stories.length} stories</span>
         {selectedIds.size > 0 && (
           <>
+            <Button size="sm" variant="ghost" onClick={handleSelectAll}>
+              Select All
+            </Button>
+            <Button size="sm" variant="ghost" onClick={handleDeselectAll}>
+              Deselect All
+            </Button>
+            <Button size="sm" variant="secondary" onClick={() => setShowBulkTagInput(!showBulkTagInput)}>
+              Tag ({selectedIds.size})
+            </Button>
             <Button size="sm" variant="danger" onClick={handleBulkDelete}>
               <Trash2 className="w-3.5 h-3.5" /> Delete ({selectedIds.size})
             </Button>
@@ -199,6 +271,30 @@ function StoryBankInner() {
           </>
         )}
       </div>
+
+      {showBulkTagInput && selectedIds.size > 0 && (
+        <div className="flex items-center gap-2 bg-surface-2 rounded-lg border border-border p-3">
+          <input
+            value={bulkTagInput}
+            onChange={(e) => setBulkTagInput(e.target.value)}
+            placeholder="Enter tag name..."
+            className="flex-1 bg-surface border border-border rounded px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                handleBulkTagApply()
+              }
+            }}
+            autoFocus
+          />
+          <Button size="sm" variant="primary" onClick={handleBulkTagApply} disabled={!bulkTagInput.trim()}>
+            Apply Tag
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => { setShowBulkTagInput(false); setBulkTagInput('') }}>
+            Cancel
+          </Button>
+        </div>
+      )}
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 max-w-xs">
@@ -238,8 +334,28 @@ function StoryBankInner() {
         </div>
       )}
 
-      <div className="space-y-3">
-        {filtered.map((story) => {
+      {stories.length > 0 && filtered.length === 0 && (
+        <div className="text-center py-10 px-4 bg-surface-2 rounded-lg border border-dashed border-border">
+          <p className="text-text-muted text-sm mb-3">
+            No stories match your search. Try different keywords or clear filters.
+          </p>
+          <Button size="sm" variant="secondary" onClick={() => { setSearch(''); setTagFilter('') }}>
+            Clear Filters
+          </Button>
+        </div>
+      )}
+
+      {filtered.length > 0 && (
+        <div className="space-y-3">
+        {pinnedStories.length > 0 && (
+          <>
+            <div className="flex items-center gap-3 text-xs text-text-muted font-medium">
+              <Star className="w-3 h-3 fill-warning text-warning" />
+              <span>Pinned Stories</span>
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-text-muted">{pinnedStories.length}</span>
+            </div>
+            {pinnedStories.map((story) => {
           const isFav = storyFavorites.includes(story.id)
           const isSelected = selectedIds.has(story.id)
           const isEditing = editingId === story.id
@@ -249,7 +365,7 @@ function StoryBankInner() {
             <div key={story.id} className={`bg-surface border rounded-lg p-4 group ${isSelected ? 'border-primary' : 'border-border'}`}>
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <button onClick={() => handleSelect(story.id)} className={`p-0.5 rounded ${isSelected ? 'text-primary' : 'text-text-muted hover:text-primary'}`}>
+                  <button onClick={(e) => handleSelect(story.id, e.shiftKey)} className={`p-0.5 rounded ${isSelected ? 'text-primary' : 'text-text-muted hover:text-primary'}`}>
                     <CheckSquare className="w-4 h-4" />
                   </button>
                   <button onClick={() => { toggleStoryFavorite(story.id); useAnalyticsStore.getState().trackEvent('story_favorited', { storyId: story.id, favorite: !isFav }) }} className={`p-0.5 ${isFav ? 'text-warning' : 'text-text-muted hover:text-warning'}`}>
@@ -268,17 +384,32 @@ function StoryBankInner() {
                 {(['situation', 'task', 'action', 'result'] as const).map((field) => (
                   <div key={field} className="group/edit">
                     {isEditing && editField === field ? (
-                      <div className="flex gap-2">
-                        <span className="font-semibold text-text shrink-0">{field.charAt(0).toUpperCase()}:</span>
-                        <textarea
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          className="flex-1 bg-surface-2 border border-border rounded px-2 py-1 text-sm text-text resize-none"
-                          rows={2}
-                          onBlur={() => saveEdit(story.id)}
-                          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(story.id) } }}
-                          autoFocus
-                        />
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
+                          <span className="font-semibold text-text shrink-0">{field.charAt(0).toUpperCase()}:</span>
+                          <textarea
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="flex-1 bg-surface-2 border border-border rounded px-2 py-1 text-sm text-text resize-none"
+                            rows={2}
+                            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(story.id) } }}
+                            autoFocus
+                          />
+                        </div>
+                        <div className="flex justify-end gap-1.5">
+                          <button
+                            onClick={() => saveEdit(story.id)}
+                            className="flex items-center gap-1 px-2 py-1 text-xs bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                          >
+                            <Check className="w-3 h-3" /> Save
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="flex items-center gap-1 px-2 py-1 text-xs bg-surface-2 text-text-muted rounded hover:text-text transition-colors"
+                          >
+                            <X className="w-3 h-3" /> Cancel
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex gap-2">
@@ -306,7 +437,101 @@ function StoryBankInner() {
             </div>
           )
         })}
-      </div>
+            {unpinnedStories.length > 0 && (
+              <>
+                <div className="flex items-center gap-3 text-xs text-text-muted font-medium mt-6">
+                  <span>Other Stories</span>
+                  <div className="flex-1 h-px bg-border" />
+                  <span className="text-text-muted">{unpinnedStories.length}</span>
+                </div>
+                {unpinnedStories.map((story) => {
+          const isFav = storyFavorites.includes(story.id)
+          const isSelected = selectedIds.has(story.id)
+          const isEditing = editingId === story.id
+          const storyScore = scores[story.id]
+
+          return (
+            <div key={story.id} className={`bg-surface border rounded-lg p-4 group ${isSelected ? 'border-primary' : 'border-border'}`}>
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <button onClick={(e) => handleSelect(story.id, e.shiftKey)} className={`p-0.5 rounded ${isSelected ? 'text-primary' : 'text-text-muted hover:text-primary'}`}>
+                    <CheckSquare className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => { toggleStoryFavorite(story.id); useAnalyticsStore.getState().trackEvent('story_favorited', { storyId: story.id, favorite: !isFav }) }} className={`p-0.5 ${isFav ? 'text-warning' : 'text-text-muted hover:text-warning'}`}>
+                    <Star className={`w-4 h-4 ${isFav ? 'fill-warning' : ''}`} />
+                  </button>
+                  <div className="flex flex-wrap gap-1.5">
+                    {story.tags.map((t, i) => (<span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/15 text-primary">{t}</span>))}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                  <button onClick={() => handleExportOne(story)} className="text-text-muted hover:text-text p-1"><Download className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => deleteStory(story.id)} className="text-text-muted hover:text-danger p-1"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+              <div className="space-y-2 text-sm">
+                {(['situation', 'task', 'action', 'result'] as const).map((field) => (
+                  <div key={field} className="group/edit">
+                    {isEditing && editField === field ? (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
+                          <span className="font-semibold text-text shrink-0">{field.charAt(0).toUpperCase()}:</span>
+                          <textarea
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="flex-1 bg-surface-2 border border-border rounded px-2 py-1 text-sm text-text resize-none"
+                            rows={2}
+                            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(story.id) } }}
+                            autoFocus
+                          />
+                        </div>
+                        <div className="flex justify-end gap-1.5">
+                          <button
+                            onClick={() => saveEdit(story.id)}
+                            className="flex items-center gap-1 px-2 py-1 text-xs bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                          >
+                            <Check className="w-3 h-3" /> Save
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="flex items-center gap-1 px-2 py-1 text-xs bg-surface-2 text-text-muted rounded hover:text-text transition-colors"
+                          >
+                            <X className="w-3 h-3" /> Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <span className="font-semibold text-text shrink-0">{field.charAt(0).toUpperCase()}:</span>
+                        <span className="text-text">{story[field]}</span>
+                        <button onClick={() => startEdit(story.id, field, story[field])} className="text-text-muted hover:text-text opacity-0 group-hover/edit:opacity-100 transition-all p-0.5">
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {story.reflection && <div className="text-text-muted italic text-xs mt-1">Reflection: {story.reflection}</div>}
+                <div className="text-[10px] text-text-muted">{formatDate(story.createdAt)}</div>
+              </div>
+
+              {storyScore && settings.storyAutoScore && (
+                <div className="mt-3 pt-3 border-t border-border space-y-1">
+                  <ScoreBarSmall label="S" value={storyScore.situation} />
+                  <ScoreBarSmall label="T" value={storyScore.task} />
+                  <ScoreBarSmall label="A" value={storyScore.action} />
+                  <ScoreBarSmall label="R" value={storyScore.result} />
+                </div>
+              )}
+            </div>
+          )
+        })}
+              </>
+            )}
+          </>
+        )}
+        </div>
+      )}
 
       <Modal open={showForm} onClose={() => setShowForm(false)} title="Add STAR Story">
         <form onSubmit={handleSubmit} className="space-y-3">

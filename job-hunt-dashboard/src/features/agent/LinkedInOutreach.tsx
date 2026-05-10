@@ -6,6 +6,10 @@ import {
   ChevronUp,
   Trash2,
   Download,
+  Send,
+  MessageCircle,
+  UserCheck,
+  CalendarCheck,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -46,6 +50,13 @@ const STATUS_BADGE: Record<OutreachEntry['status'], { label: string; variant: 'i
 const CONNECTION_MAX_CHARS = 300
 const INMAIL_MAX_CHARS = 2000
 const CHAR_WARN_THRESHOLD = 0.8
+
+const FUNNEL_STAGES = [
+  { key: 'sent' as const, icon: Send, label: 'Sent' },
+  { key: 'replied' as const, icon: MessageCircle, label: 'Replied' },
+  { key: 'connected' as const, icon: UserCheck, label: 'Connected' },
+  { key: 'booked' as const, icon: CalendarCheck, label: 'Booked' },
+]
 
 function nextStatus(current: OutreachEntry['status']): OutreachEntry['status'] {
   const idx = STATUSES.indexOf(current)
@@ -110,6 +121,7 @@ function LinkedInOutreachInner() {
   const [sharedInterest, setSharedInterest] = useState('')
   const [notes, setNotes] = useState('')
   const [articleRef, setArticleRef] = useState('')
+  const [showDetails, setShowDetails] = useState(false)
 
   /* ---- generated state ---- */
   const [variants, setVariants] = useState<OutreachVariant[]>([])
@@ -131,6 +143,17 @@ function LinkedInOutreachInner() {
 
   const charCount = selectedVariant ? selectedVariant.message.length : 0
   const charWarning = charCount > maxChars * CHAR_WARN_THRESHOLD
+
+  /* ---- funnel counts ---- */
+  const funnelCounts = useMemo(
+    () => ({
+      sent: outreachMessages.filter((m) => m.status === 'sent').length,
+      replied: outreachMessages.filter((m) => m.status === 'replied').length,
+      connected: outreachMessages.filter((m) => m.status === 'connected').length,
+      booked: outreachMessages.filter((m) => m.status === 'booked').length,
+    }),
+    [outreachMessages],
+  )
 
   const handleGenerate = useCallback(async () => {
     if (!recipient.trim()) return
@@ -192,6 +215,17 @@ function LinkedInOutreachInner() {
     setSelectedVariantId(null)
   }, [selectedVariant, messageType, recipient, company, notes, tone, addOutreachMessage, trackEvent])
 
+  const handleFollowUp = useCallback(
+    (entry: OutreachEntry) => {
+      setRecipient(entry.recipient)
+      setCompany(entry.context || '')
+      setMessageType('followup')
+      setShowDetails(true)
+      handleGenerate()
+    },
+    [handleGenerate],
+  )
+
   const handleCycleStatus = useCallback(
     (entry: OutreachEntry) => {
       const newStatus = nextStatus(entry.status)
@@ -232,6 +266,28 @@ function LinkedInOutreachInner() {
 
   return (
     <div className="space-y-6">
+      {/* Funnel Dashboard */}
+      {outreachMessages.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {FUNNEL_STAGES.map((stage, idx) => {
+            const count = funnelCounts[stage.key]
+            const Icon = stage.icon
+            return (
+              <div key={stage.key} className="bg-surface rounded-lg border border-border p-3 text-center">
+                <Icon className="w-4 h-4 mx-auto text-text-muted mb-1" />
+                <p className="text-lg font-bold text-text">{count}</p>
+                <p className="text-xs text-text-muted">{stage.label}</p>
+                {idx < FUNNEL_STAGES.length - 1 && (
+                  <div className="hidden sm:block text-text-muted mt-1">
+                    <ChevronDown className="w-3 h-3 mx-auto rotate-[-90deg]" />
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {/* description */}
       <p className="text-sm text-text-muted">
         Generate LinkedIn outreach messages for networking, follow-ups, thank-yous, and referral
@@ -262,7 +318,7 @@ function LinkedInOutreachInner() {
         />
       </div>
 
-      {/* personalization fields */}
+      {/* Recipient field (always visible) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input
           label="Recipient name *"
@@ -270,45 +326,63 @@ function LinkedInOutreachInner() {
           onChange={(e) => setRecipient(e.target.value)}
           placeholder="e.g. John Smith"
         />
-        <Input
-          label="Company name"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-          placeholder="e.g. Acme Corp"
-        />
-        <Input
-          label="Target role"
-          value={targetRole}
-          onChange={(e) => setTargetRole(e.target.value)}
-          placeholder="e.g. Senior Software Engineer"
-        />
-        <Input
-          label="Mutual connection"
-          value={mutualConnection}
-          onChange={(e) => setMutualConnection(e.target.value)}
-          placeholder="e.g. Jane Doe (optional)"
-        />
-        <Input
-          label="Shared interest"
-          value={sharedInterest}
-          onChange={(e) => setSharedInterest(e.target.value)}
-          placeholder="e.g. AI, open-source (optional)"
-        />
-        <Input
-          label="Article reference"
-          value={articleRef}
-          onChange={(e) => setArticleRef(e.target.value)}
-          placeholder="e.g. Your post on X (optional)"
-        />
       </div>
 
-      <Textarea
-        label="Context / notes"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        placeholder="Any additional context for the outreach message (optional)"
-        rows={3}
-      />
+      {/* Add Details Toggle */}
+      <button
+        type="button"
+        onClick={() => setShowDetails(!showDetails)}
+        className="flex items-center gap-1 text-xs text-text-muted hover:text-text transition-colors"
+      >
+        {showDetails ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        {showDetails ? 'Hide Details' : 'Add Details'}
+      </button>
+
+      {/* Personalization Details (collapsible) */}
+      {showDetails && (
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label="Company name"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="e.g. Acme Corp"
+            />
+            <Input
+              label="Target role"
+              value={targetRole}
+              onChange={(e) => setTargetRole(e.target.value)}
+              placeholder="e.g. Senior Software Engineer"
+            />
+            <Input
+              label="Mutual connection"
+              value={mutualConnection}
+              onChange={(e) => setMutualConnection(e.target.value)}
+              placeholder="e.g. Jane Doe (optional)"
+            />
+            <Input
+              label="Shared interest"
+              value={sharedInterest}
+              onChange={(e) => setSharedInterest(e.target.value)}
+              placeholder="e.g. AI, open-source (optional)"
+            />
+            <Input
+              label="Article reference"
+              value={articleRef}
+              onChange={(e) => setArticleRef(e.target.value)}
+              placeholder="e.g. Your post on X (optional)"
+            />
+          </div>
+
+          <Textarea
+            label="Context / notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Any additional context for the outreach message (optional)"
+            rows={3}
+          />
+        </div>
+      )}
 
       {/* generate */}
       <div className="flex items-center gap-3">
@@ -456,12 +530,12 @@ function LinkedInOutreachInner() {
                         >
                           <Badge variant={label.variant}>{label.label}</Badge>
                         </button>
+                        {overdue && (
+                          <Badge variant="warning">Follow-up needed!</Badge>
+                        )}
                         <span className="text-xs text-text-muted whitespace-nowrap">
                           {formatDate(entry.createdAt)}
                         </span>
-                        {overdue && (
-                          <span className="text-xs text-danger font-medium">Overdue</span>
-                        )}
                         <span
                           className={`text-xs ${
                             overdue ? 'text-danger' : 'text-text-muted'
@@ -490,6 +564,14 @@ function LinkedInOutreachInner() {
                           {entry.message}
                         </div>
                         <div className="flex justify-end gap-2">
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => handleFollowUp(entry)}
+                          >
+                            <Sparkles className="w-3.5 h-3.5" />
+                            Generate Follow-up
+                          </Button>
                           {deleteConfirmId === entry.id ? (
                             <div className="flex items-center gap-2">
                               <span className="text-xs text-text-muted">Confirm delete?</span>

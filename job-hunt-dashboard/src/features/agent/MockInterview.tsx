@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-import { Send, Sparkles, RotateCcw, Download, Timer, SkipForward } from 'lucide-react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { Send, Sparkles, RotateCcw, Download, Timer, SkipForward, Search } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
@@ -58,6 +58,13 @@ function exportToJson(session: MockInterviewSession): string {
   return JSON.stringify(session, null, 2)
 }
 
+const PAUSE_OPTIONS = [
+  { value: '0', label: 'No pause' },
+  { value: '15', label: '15s pause' },
+  { value: '30', label: '30s pause' },
+  { value: '60', label: '60s pause' },
+] as const
+
 function MockInterviewInner() {
   const addSession = useAgentStore((s) => s.addSession)
   const updateSession = useAgentStore((s) => s.updateSession)
@@ -71,20 +78,30 @@ function MockInterviewInner() {
   const [submitting, setSubmitting] = useState(false)
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [pauseDuration, setPauseDuration] = useState(0)
+  const [pausing, setPausing] = useState(false)
+  const [pauseCountdown, setPauseCountdown] = useState(0)
+  const pauseTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [sessionFilter, setSessionFilter] = useState<'all' | 'completed' | 'in-progress'>('all')
+  const [sessionSearch, setSessionSearch] = useState('')
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
   }, [])
 
-  useEffect(() => {
-    return () => clearTimer()
-  }, [clearTimer])
+  const clearPauseTimer = useCallback(() => {
+    if (pauseTimerRef.current) { clearInterval(pauseTimerRef.current); pauseTimerRef.current = null }
+  }, [])
 
   useEffect(() => {
-    if (textareaRef.current && session && !session.completedAt) {
+    return () => { clearTimer(); clearPauseTimer() }
+  }, [clearTimer, clearPauseTimer])
+
+  useEffect(() => {
+    if (textareaRef.current && session && !session.completedAt && !pausing) {
       textareaRef.current.focus()
     }
-  }, [session?.currentIndex, session?.completedAt])
+  }, [session?.currentIndex, session?.completedAt, pausing])
 
   const startTimer = useCallback((limitSeconds: number) => {
     clearTimer()
@@ -154,16 +171,59 @@ function MockInterviewInner() {
       questionIndex: session.currentIndex,
       answerLength: currentAnswer.length,
     })
-    if (settings.mockInterviewTimedMode && !isComplete) startTimer(settings.mockInterviewTimeLimit)
+    if (!isComplete && pauseDuration > 0) {
+      setPausing(true)
+      setPauseCountdown(pauseDuration)
+      pauseTimerRef.current = setInterval(() => {
+        setPauseCountdown((prev) => {
+          if (prev <= 1) {
+            clearPauseTimer()
+            setPausing(false)
+            if (settings.mockInterviewTimedMode) startTimer(settings.mockInterviewTimeLimit)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    } else if (!isComplete && settings.mockInterviewTimedMode) {
+      startTimer(settings.mockInterviewTimeLimit)
+    }
   }
+
+  const handleSkip = useCallback(() => {
+    if (!session) return
+    clearTimer()
+    clearPauseTimer()
+    const nextIndex = Math.min(session.currentIndex + 1, session.questions.length - 1)
+    const updated = { ...session, currentIndex: nextIndex }
+    setSession(updated)
+    setCurrentAnswer('')
+    setPausing(false)
+    setPauseCountdown(0)
+    if (settings.mockInterviewTimedMode) startTimer(settings.mockInterviewTimeLimit)
+  }, [session, clearTimer, clearPauseTimer, settings.mockInterviewTimedMode, startTimer])
 
   const handleReset = () => {
     clearTimer()
+    clearPauseTimer()
     setSession(null)
     setCurrentAnswer('')
     setJdTitle('')
     setTimeLeft(null)
+    setPausing(false)
+    setPauseCountdown(0)
   }
+
+  const filteredSessions = useMemo(() => {
+    let result = [...sessions]
+    if (sessionFilter === 'completed') result = result.filter((s) => s.completedAt)
+    if (sessionFilter === 'in-progress') result = result.filter((s) => !s.completedAt)
+    if (sessionSearch.trim()) {
+      const q = sessionSearch.toLowerCase()
+      result = result.filter((s) => s.jdTitle.toLowerCase().includes(q))
+    }
+    return result
+  }, [sessions, sessionFilter, sessionSearch])
 
   const formatTime = (seconds: number): string => {
     const m = Math.floor(seconds / 60)
@@ -187,11 +247,46 @@ function MockInterviewInner() {
           </Button>
           <span className="text-xs text-text-muted">{settings.mockInterviewQuestionCount} questions | {settings.mockInterviewTimedMode ? `${settings.mockInterviewTimeLimit}s per question` : 'untimed'}</span>
         </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-text-muted">Pause between questions:</span>
+          <select
+            value={String(pauseDuration)}
+            onChange={(e) => setPauseDuration(Number(e.target.value))}
+            className="bg-surface border border-border rounded-lg px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            {PAUSE_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
         {sessions.length > 0 && (
           <div className="pt-4">
             <p className="text-xs text-text-muted mb-2 uppercase tracking-wider">Past Sessions</p>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="relative flex-1 max-w-xs">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted" />
+                <input
+                  value={sessionSearch}
+                  onChange={(e) => setSessionSearch(e.target.value)}
+                  placeholder="Search by title..."
+                  className="w-full bg-surface border border-border rounded-lg pl-8 pr-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+              </div>
+              <select
+                value={sessionFilter}
+                onChange={(e) => setSessionFilter(e.target.value as typeof sessionFilter)}
+                className="bg-surface border border-border rounded-lg px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                <option value="all">All</option>
+                <option value="completed">Completed</option>
+                <option value="in-progress">In Progress</option>
+              </select>
+            </div>
             <div className="space-y-2 max-h-60 overflow-y-auto">
-              {[...sessions].reverse().slice(0, 10).map((s) => (
+              {filteredSessions.length === 0 && sessions.length > 0 && (
+                <p className="text-xs text-text-muted text-center py-4">No sessions match your filter.</p>
+              )}
+              {[...filteredSessions].reverse().slice(0, 10).map((s) => (
                 <button
                   key={s.id}
                   onClick={() => { setSession(s); setCurrentAnswer('') }}
@@ -286,6 +381,15 @@ function MockInterviewInner() {
             </div>
           ))}
         </div>
+      ) : pausing ? (
+        <Card title={`Next question in ${pauseCountdown}...`}>
+          <div className="flex items-center justify-center py-8">
+            <div className="text-center space-y-3">
+              <p className="text-4xl font-bold text-primary">{pauseCountdown}</p>
+              <p className="text-sm text-text-muted">Take a moment to prepare for the next question</p>
+            </div>
+          </div>
+        </Card>
       ) : (
         <Card title={`Question ${session.currentIndex + 1} of ${session.questions.length}`}>
           <div className="space-y-4">
@@ -307,21 +411,19 @@ function MockInterviewInner() {
               rows={4}
               placeholder="Type your answer here..."
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+                  e.preventDefault()
+                  handleSkip()
+                } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault()
                   handleSubmit()
                 }
               }}
             />
             <div className="flex justify-between items-center">
-              <span className="text-xs text-text-muted">Ctrl+Enter to submit</span>
+              <span className="text-xs text-text-muted">Ctrl+Enter to submit • Ctrl+Shift+Enter to skip</span>
               <div className="flex gap-3">
-                <Button variant="secondary" size="sm" onClick={() => {
-                  const next = { ...session, currentIndex: Math.min(session.currentIndex + 1, session.questions.length - 1) }
-                  setSession(next)
-                  setCurrentAnswer('')
-                  if (settings.mockInterviewTimedMode) startTimer(settings.mockInterviewTimeLimit)
-                }} disabled={session.currentIndex >= session.questions.length - 1}>
+                <Button variant="secondary" size="sm" onClick={handleSkip} disabled={session.currentIndex >= session.questions.length - 1}>
                   <SkipForward className="w-3.5 h-3.5" /> Skip
                 </Button>
                 <Button onClick={handleSubmit} loading={submitting} disabled={!currentAnswer.trim()}>

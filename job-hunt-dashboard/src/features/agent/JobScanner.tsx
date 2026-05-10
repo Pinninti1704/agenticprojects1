@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Scan, Download, Trash2, ChevronDown, ChevronUp, FileText, Star, AlertTriangle } from 'lucide-react'
+import { Scan, Download, Trash2, ChevronDown, ChevronUp, FileText, Star, AlertTriangle, Columns } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { Badge } from '@/components/ui/Badge'
@@ -33,6 +33,20 @@ function skillFrequency(jdText: string, skills: string[]): { skill: string; coun
     })
     .filter((s) => s.count > 0)
     .sort((a, b) => b.count - a.count)
+}
+
+function extractJdTitle(text: string): string {
+  const firstLine = text.split('\n').find((l) => l.trim().length > 0)
+  return firstLine ? firstLine.trim().slice(0, 60) : 'Job Description'
+}
+
+function computeRoleScore(role: string, company: string, matchResult: JobMatchResult): number {
+  let score = 50
+  if (role.toLowerCase().includes('senior') || company.toLowerCase().includes('senior')) score += 15
+  score += matchResult.matchedSkills.length * 10
+  score += matchResult.niceToHaveMissingSkills.length * 5
+  if (matchResult.criticalMissingSkills.length >= 3) score -= 10
+  return Math.min(100, Math.max(0, score))
 }
 
 function matchColor(value: number): string {
@@ -87,6 +101,10 @@ function JobScannerInner() {
   /* ---- history state ---- */
   const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null)
 
+  /* ---- compare mode ---- */
+  const [compareMode, setCompareMode] = useState(false)
+  const [compareIds, setCompareIds] = useState<string[]>([])
+
   const skills = useMemo(() => dedupeSkills(skillsInput.split(',').concat(autoExtracted && resumeText ? extractSkillsFromText(resumeText, SKILL_LEXICON) : [])), [skillsInput, autoExtracted, resumeText])
 
   const extractedInfo = useMemo(() => {
@@ -121,14 +139,23 @@ function JobScannerInner() {
     const result = provider.analyzeJobMatch(jdText, skillsToUse)
     setMatchResult(result)
 
-    const roles = provider.generateInterviewQuestions(jdText, 4).map((q, i) => ({
-      company: ['TechCorp', 'StartupXYZ', 'DataFlow Inc', 'CloudBase'][i % 4],
-      role: q.question.replace(/.*?/g, '').slice(0, 40),
-      location: ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'Seattle, WA'][i % 4],
-      matchScore: Math.min(100, result.matchPercent + Math.round((Math.random() - 0.3) * 30)),
-      url: '',
-      reason: result.suggestions[i % result.suggestions.length] || 'Skills alignment with job requirements',
-    }))
+    const roleCount = Math.min(6, 4 + Math.floor(jdText.split('\n').filter(l => l.trim()).length / 10))
+
+    const roles = provider.generateInterviewQuestions(jdText, roleCount).map((q, i) => {
+      const companies = ['TechCorp', 'StartupXYZ', 'DataFlow Inc', 'CloudBase', 'InnovateLabs', 'NexGenAI']
+      const locations = ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'Seattle, WA', 'Boston, MA', 'Chicago, IL']
+      const company = companies[i % companies.length]
+      const location = locations[i % locations.length]
+      const roleTitle = q.question.replace(/.*?/g, '').slice(0, 40)
+      return {
+        company,
+        role: roleTitle,
+        location,
+        matchScore: computeRoleScore(roleTitle, company, result),
+        url: '',
+        reason: result.suggestions[i % result.suggestions.length] || 'Skills alignment with job requirements',
+      }
+    })
     setScannedRoles(roles)
 
     const newScannedJob: ScannedJob = {
@@ -426,28 +453,100 @@ function JobScannerInner() {
       {/* Scan History */}
       {sortedHistory.length > 0 && (
         <div className="space-y-3">
-          <p className="text-xs text-text-muted uppercase tracking-wider font-medium">
-            Scan History ({sortedHistory.length})
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-text-muted uppercase tracking-wider font-medium">
+              Scan History ({sortedHistory.length})
+            </p>
+            <Button
+              size="sm"
+              variant={compareMode ? 'primary' : 'ghost'}
+              onClick={() => { setCompareMode(!compareMode); setCompareIds([]) }}
+            >
+              <Columns className="w-3.5 h-3.5" />
+              {compareMode ? 'Exit Compare' : 'Compare'}
+            </Button>
+          </div>
+
+          {/* Compare View */}
+          {compareMode && compareIds.length === 2 && (
+            <Card title="Compare Scans">
+              <div className="grid grid-cols-2 gap-4">
+                {compareIds.map((cid) => {
+                  const job = sortedHistory.find((j) => j.id === cid)
+                  if (!job) return null
+                  return (
+                    <div key={cid} className="space-y-3">
+                      <p className="text-sm font-semibold text-text">{extractJdTitle(job.jdText)}</p>
+                      <p className="text-xs text-text-muted">{formatDate(job.createdAt)}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-text font-medium">Match:</span>
+                        <span className="text-lg font-bold text-primary">{job.matchResult.matchPercent}%</span>
+                      </div>
+                      <div>
+                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Matched</p>
+                        <div className="flex flex-wrap gap-1">
+                          {job.matchResult.matchedSkills.map((s) => (
+                            <Badge key={s} variant="success">{s}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs text-text-muted mb-1 uppercase tracking-wider">Missing</p>
+                        <div className="flex flex-wrap gap-1">
+                          {job.matchResult.criticalMissingSkills.map((s) => (
+                            <Badge key={s} variant="danger">{s}</Badge>
+                          ))}
+                          {job.matchResult.niceToHaveMissingSkills.map((s) => (
+                            <Badge key={s} variant="warning">{s}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="mt-3 pt-3 border-t border-border">
+                <Button size="sm" variant="ghost" onClick={() => { setCompareMode(false); setCompareIds([]) }}>
+                  Close Compare
+                </Button>
+              </div>
+            </Card>
+          )}
+
           <div className="space-y-2">
             {sortedHistory.map((job) => {
               const isExpanded = expandedHistoryId === job.id
+              const isCompareSelected = compareIds.includes(job.id)
               return (
-                <div key={job.id} className="bg-surface border border-border rounded-lg p-3">
+                <div
+                  key={job.id}
+                  className={`bg-surface border rounded-lg p-3 ${isCompareSelected ? 'border-primary' : 'border-border'} ${compareMode ? 'cursor-pointer hover:border-primary/50' : ''}`}
+                  onClick={() => {
+                    if (!compareMode) return
+                    setCompareIds((prev) => {
+                      if (prev.includes(job.id)) return prev.filter((id) => id !== job.id)
+                      if (prev.length >= 2) return [prev[1], job.id]
+                      return [...prev, job.id]
+                    })
+                  }}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-sm font-semibold text-text">{job.matchResult.matchPercent}% match</span>
+                      <span className="text-sm font-semibold text-text truncate max-w-[200px]">
+                        {extractJdTitle(job.jdText)}
+                      </span>
+                      <span className="text-xs text-text-muted">{job.matchResult.matchPercent}% match</span>
                       <span className="text-xs text-text-muted">{job.extractedSkills.length} skills</span>
                       <span className="text-xs text-text-muted">{formatDate(job.createdAt)}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => handleRestore(job)} className="text-text-muted hover:text-text p-1" title="Restore this scan">
+                      <button onClick={(e) => { e.stopPropagation(); handleRestore(job) }} className="text-text-muted hover:text-text p-1" title="Restore this scan">
                         <Star className="w-3.5 h-3.5" />
                       </button>
-                      <button onClick={() => { deleteScannedJob(job.id); trackEvent('job_scanned_deleted', { jobId: job.id }) }} className="text-text-muted hover:text-danger p-1" title="Delete">
+                      <button onClick={(e) => { e.stopPropagation(); deleteScannedJob(job.id); trackEvent('job_scanned_deleted', { jobId: job.id }) }} className="text-text-muted hover:text-danger p-1" title="Delete">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
-                      <button onClick={() => setExpandedHistoryId(isExpanded ? null : job.id)} className="text-text-muted hover:text-text p-1">
+                      <button onClick={(e) => { e.stopPropagation(); setExpandedHistoryId(isExpanded ? null : job.id) }} className="text-text-muted hover:text-text p-1">
                         {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                       </button>
                     </div>
