@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Settings, Sliders, Database, Globe, FileText, RefreshCw, Trash2 } from 'lucide-react'
+import { Settings, Sliders, Database, Globe, FileText, RefreshCw, Trash2, Brain } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { AiSettingsTab } from './AiSettingsTab'
 import type { SettingsTab } from '@/types/settings'
 
 interface SettingsPanelProps {
@@ -17,6 +18,7 @@ const tabs: { id: SettingsTab; label: string; icon: typeof Settings }[] = [
   { id: 'app', label: 'General', icon: Sliders },
   { id: 'scraper', label: 'Question Scraper', icon: Globe },
   { id: 'applications', label: 'Applications', icon: FileText },
+  { id: 'ai', label: 'AI Features', icon: Brain },
   { id: 'data', label: 'Data Management', icon: Database },
 ]
 
@@ -157,6 +159,8 @@ export function SettingsPanel({ open, onClose, onClearData }: SettingsPanelProps
               </p>
             </div>
           )}
+
+          {activeTab === 'ai' && <AiSettingsTab />}
 
           {activeTab === 'data' && (
             <div className="space-y-4">

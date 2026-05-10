@@ -436,23 +436,22 @@ function App() {
         const symbolData = result.agents_results?.[symbol]
         
         if (symbolData) {
-          // Extract from technical analysis if available
-          const ta = symbolData.technical_analysis
-          const fa = symbolData.fundamental_analysis
-          const signalData = symbolData.signal?.signal || symbolData.signal
+          // Handle new format {summary, signal} or old format {technical_analysis, fundamental_analysis, signal}
+          const signalData = symbolData.signal?.signal || symbolData.signal || symbolData
+          const summary = symbolData.summary || {}
           
           // Map 'side' to recommendation (buy/sell/neutral)
-          const side = signalData?.side || 'neutral'
+          const side = signalData?.side || summary?.side || 'neutral'
           const recommendation = side === 'long' ? 'BUY' : side === 'short' ? 'SELL' : 'HOLD'
           
           setAiAnalysis({
             recommendation,
-            reasoning: ta?.analysis || fa?.analysis || signalData?.reasoning || 'Analysis in progress...',
-            confidence: (signalData?.confidence || 0.7) * 100,
-            riskLevel: signalData?.risk_level || 'MODERATE',
-            targetPrice: signalData?.target_price || (indicators?.price ? (indicators.price * 1.1).toFixed(2) : '0.00'),
-            stopLoss: signalData?.stop_loss || (indicators?.price ? (indicators.price * 0.95).toFixed(2) : '0.00'),
-            timeframe: signalData?.timeframe || '1-2 weeks'
+            reasoning: summary?.analysis || signalData?.reasoning || 'AI analysis in progress...',
+            confidence: (signalData?.confidence || summary?.confidence || 0.7) * 100,
+            riskLevel: signalData?.risk_level || summary?.risk_level || 'MODERATE',
+            targetPrice: signalData?.target_price || summary?.target_price || (indicators?.price ? (indicators.price * 1.1).toFixed(2) : '0.00'),
+            stopLoss: signalData?.stop_loss || summary?.stop_loss || (indicators?.price ? (indicators.price * 0.95).toFixed(2) : '0.00'),
+            timeframe: signalData?.timeframe || summary?.timeframe || '1-2 weeks'
           })
         } else {
           // Fallback to result-level signals

@@ -41,4 +41,4 @@ export interface ApplicationSettings {
   showTerminalStages: boolean
 }
 
-export type SettingsTab = 'app' | 'scraper' | 'applications' | 'data'
+export type SettingsTab = 'app' | 'scraper' | 'applications' | 'data' | 'ai'

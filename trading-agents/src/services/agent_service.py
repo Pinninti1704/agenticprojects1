@@ -429,4 +429,6 @@ async def signal_agent(symbol: str, ta_analysis: dict, fa_analysis: dict, curren
     return agent.run(symbol, ta_analysis, fa_analysis, current_price)
 
 
-if __name__ =
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8006)
