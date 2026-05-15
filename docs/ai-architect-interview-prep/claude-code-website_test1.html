@@ -187,6 +187,12 @@ hr{margin:40px 0;border:none;border-top:1px solid var(--border)}
 <div class="sb-grp">Project Docs</div>
 <a href="#" class="sl" onclick="switchTab('Project Docs')">Project Docs</a>
 
+
+<div class="sb-grp">Job Intelligence</div>
+<a href="#" class="sl" onclick="switchTab('Job Intelligence')">Job Intelligence</a>
+
+<div class="sb-grp">Job Intelligence</div>
+<a href="#" class="sl" onclick="switchTab('Job Intelligence')">Job Intelligence</a>
 <!-- Ecosystem tab removed -->
 </nav>
 <div class="mn">
@@ -2325,6 +2331,36 @@ Sources: Claude Code official docs, Anthropic engineering blogs, production case
 <li><strong>Multi-Token Prediction (MTP)</strong>: DeepSeek V3's MTP is being adopted by other labs. Predicting multiple future tokens trains better representations and enables speculative decoding for 2-3x inference speedup.</li></ul>
 
 <hr>
+
+<h2 id="agent-framework-matrix">0. AI Agent Framework Comparison Matrix (2026)</h2>
+<p>Comprehensive comparison of the top AI agent frameworks ranked by production readiness, GitHub presence, and real-world ecosystem adoption. Data sourced from GitHub, PyPI downloads, and <strong>YouTube explainers</strong> from builders implementing these frameworks in production.</p>
+
+<table>
+<tr><th>Framework</th><th>Stars</th><th>PyPI/mo</th><th>Best For</th><th>Architecture</th><th>Language</th><th>YouTube Explainers</th></tr>
+<tr><td><strong>LangGraph</strong><br><code>github.com/langchain-ai/langgraph</code></td><td>44.6K</td><td>34.5M</td><td>Complex stateful workflows, cyclic reasoning loops</td><td>Graph state machine, checkpointed state</td><td>Python, TS</td><td><a href="https://youtube.com/results?search_query=LangGraph+tutorial+2026" target="_blank">Multiple tutorials</a></td></tr>
+<tr><td><strong>CrewAI</strong><br><code>github.com/crewAIInc/crewAI</code></td><td>46K</td><td>5.2M</td><td>Role-based multi-agent teams, rapid deployment</td><td>Role-based agents + Flows</td><td>Python</td><td><a href="https://youtube.com/results?search_query=CrewAI+tutorial+2026" target="_blank">Wide coverage</a></td></tr>
+<tr><td><strong>OpenAI Agents SDK</strong><br><code>github.com/openai/openai-agents-python</code></td><td>25.9K</td><td>10.3M</td><td>Fast prototyping, OpenAI-native production</td><td>Single-agent + handoffs</td><td>Python, TS</td><td><a href="https://youtube.com/results?search_query=OpenAI+Agents+SDK+2026" target="_blank">Official demos</a></td></tr>
+<tr><td><strong>Google ADK</strong><br><code>github.com/google/adk-python</code></td><td>19K</td><td>3.3M</td><td>Google Cloud / Gemini ecosystem, A2A protocol</td><td>Graph-based + workflow runtime</td><td>Python, Java</td><td><a href="https://youtube.com/results?search_query=Google+ADK+agent+2026" target="_blank">Google I/O talks</a></td></tr>
+<tr><td><strong>MS Agent Framework</strong><br><code>github.com/microsoft/agent-framework</code></td><td>75K</td><td>856K</td><td>Enterprise .NET/Java, Microsoft 365, Azure</td><td>Graph-based + Durable Task</td><td>Python, .NET, Java</td><td><a href="https://youtube.com/results?search_query=Microsoft+Agent+Framework+2026" target="_blank">Build 2026 sessions</a></td></tr>
+<tr><td><strong>PydanticAI</strong><br><code>github.com/pydantic/pydantic-ai</code></td><td>15.1K</td><td>High</td><td>Type-safe Python agents, structured outputs</td><td>Pydantic v2 validated tools</td><td>Python</td><td><a href="https://youtube.com/results?search_query=Pydantic+AI+agent+2026" target="_blank">Dev tutorials</a></td></tr>
+<tr><td><strong>Mastra</strong><br><code>github.com/mastra-ai/mastra</code></td><td>25K</td><td>1.8M npm</td><td>TypeScript-first agents, Next.js native</td><td>Working memory + semantic recall</td><td>TypeScript</td><td><a href="https://youtube.com/results?search_query=Mastra+AI+2026" target="_blank">JS community</a></td></tr>
+<tr><td><strong>Claude Agent SDK</strong><br><code>github.com/anthropics/claude-agent-sdk</code></td><td>15K</td><td>New</td><td>Tool-heavy verification workflows, Anthropic stack</td><td>Thin harness + verification loops</td><td>Python, TS</td><td><a href="https://youtube.com/results?search_query=Claude+Agent+SDK+2026" target="_blank">Anthropic demos</a></td></tr>
+<tr><td><strong>Agno</strong><br><code>github.com/agno-agi/agno</code></td><td>18.5K</td><td>High</td><td>Lightweight multi-modal agent runtime</td><td>Agent runtime + control plane</td><td>Python</td><td><a href="https://youtube.com/results?search_query=Agno+agent+framework+2026" target="_blank">Indie dev videos</a></td></tr>
+<tr><td><strong>Smolagents</strong><br><code>github.com/huggingface/smolagents</code></td><td>15K</td><td>Moderate</td><td>Minimal footprint, HuggingFace ecosystem</td><td>Code-as-action agents</td><td>Python</td><td><a href="https://youtube.com/results?search_query=Smolagents+HuggingFace+2026" target="_blank">HF community</a></td></tr>
+<tr><td><strong>AG2</strong><br><code>github.com/ag2ai/ag2</code></td><td>40K</td><td>Moderate</td><td>Multi-agent conversation, AutoGen successor</td><td>Pub/sub + streaming architecture</td><td>Python</td><td><a href="https://youtube.com/results?search_query=AG2+agent+framework+2026" target="_blank">OSS tutorials</a></td></tr>
+</table>
+
+<h3 id="youtube-resources">Top YouTube Channels for Agent Architecture</h3>
+<ul>
+<li><strong>Anthropic Official</strong> (<a href="https://youtube.com/@AnthropicAI" target="_blank">youtube.com/@AnthropicAI</a>) — Deep dives into Claude Code architecture, harness design, agent patterns, and tool use best practices.</li>
+<li><strong>LangChain / LangGraph</strong> (<a href="https://youtube.com/@LangChain" target="_blank">youtube.com/@LangChain</a>) — Official tutorials on graph-based orchestration, state management, and production deployment patterns.</li>
+<li><strong>CrewAI Official</strong> (<a href="https://youtube.com/@crewai" target="_blank">youtube.com/@crewai</a>) — Role-based multi-agent workflows, real-world case studies, and integration demos.</li>
+<li><strong>Google AI / ADK</strong> (<a href="https://youtube.com/@GoogleAI" target="_blank">youtube.com/@GoogleAI</a>) — Agent Development Kit (ADK), A2A protocol, Gemini agent patterns, Google I/O sessions.</li>
+<li><strong>Microsoft Agent Framework</strong> (<a href="https://youtube.com/@MicrosoftDeveloper" target="_blank">youtube.com/@MicrosoftDeveloper</a>) — MAF v1.0 architecture, durable workflows, multi-agent orchestration, Build conference sessions.</li>
+<li><strong>OpenAI Developer</strong> (<a href="https://youtube.com/@OpenAI" target="_blank">youtube.com/@OpenAI</a>) — Agents SDK, handoffs, guardrails, tracing, and production deployment patterns.</li>
+<li><strong>NVIDIA Developer</strong> (<a href="https://youtube.com/@NVIDIADeveloper" target="_blank">youtube.com/@NVIDIADeveloper</a>) — Nemotron models, NIM microservices, AgentIQ, NeMo framework for agent customization.</li>
+<li><strong>AI Agents from Scratch</strong> (<a href="https://youtube.com/results?search_query=ai+agents+from+scratch" target="_blank">Search YouTube</a>) — Educational content teaching agent internals from first principles without frameworks.</li>
+</ul>
 
 <h2 id="1-core-multi-agent-swarm-frameworks">1. Core Multi-Agent / Swarm Frameworks</h2>
 <h3 id="11-swarms-framework-kyegomezswarms">1.1 Swarms Framework (kyegomez/swarms)</h3>
@@ -6868,6 +6904,10 @@ trackEvent: (name: string, metadata?: Record&lt;string, string | number&gt;) =&g
 <div class="qa-block"><div class="qa-q">2. How does the seeded PRNG enable deterministic mock AI behavior?</div><div class="qa-a">The seeded pseudo-random number generator takes a JD title as seed. The same JD title always produces the same question set, skill extraction, and role matching results. This is critical for: (1) Testing â€” assertions pass consistently. (2) UX â€” users see stable results while editing. (3) Debugging â€” reproducing issues doesn't require capturing random state.</div></div>
 <div class="qa-block"><div class="qa-q">3. Why 9 separate tasks instead of a single monolithic implementation?</div><div class="qa-a">Each task produces a build-checkable artifact with a commit. This enables: (1) Parallel work â€” types can be built while the analytics store is designed. (2) Clear review boundaries â€” each commit does one thing. (3) Rollback granularity â€” if the JobScanner rewrite breaks, roll back just that task. (4) CI/CD validation â€” each intermediate state can be type-checked independently.</div></div>
 <div class="qa-block"><div class="qa-q">4. What's the reasoning behind the MockAiProvider's 30-question pool and 70+ skill lexicon?</div><div class="qa-a">The 30-question pool ensures variety across sessions (behavioral 10, technical 10, coding 5, situational 5) while staying small enough to manually curate for quality. The 70+ skill lexicon provides broad coverage of common tech keywords without being exhaustive â€” it matches the Pareto principle for mock data. Both are designed to be seeded-PRNG-driven for deterministic behavior, which is the key architectural decision.</div></div>
+
+
+<div class="sb-grp">Job Intelligence</div>
+<a href="#" class="sl" onclick="switchTab('Job Intelligence')">Job Intelligence</a>
 <!-- Ecosystem tab removed -->
 <h3 id="8-1-aws">8.1 Amazon Web Services (AWS)</h3>
 <table>
@@ -7134,8 +7174,67 @@ Sources: GitHub, OSSInsight, fungies.io, awesome-ai-agents-2026
 <p><em>These sections from the original Agentic AI tab provide curated awesome lists and learning roadmaps for the AI agent ecosystem.</em></p>
 </div>
 </div>
+<div class="tab-content" id="tab-Job Intelligence">
+<h1>Job Intelligence</h1>
+<p><strong>Last updated:</strong> 2026-05-15 22:15 UTC | <strong>Jobs analyzed:</strong> 6</p>
+<hr>
+
+<!-- Overall Coverage Gauge -->
+<h2 id="coverage-dashboard">Coverage Dashboard</h2>
+<div class="info-crd">
+  <div class="stat"><span class="stat-val" style="color:var(--red)">29%</span><span class="stat-lbl">Overall Interview Prep Coverage</span></div>
+  <div class="stat"><span class="stat-val">26</span><span class="stat-lbl">Skills Covered</span></div>
+  <div class="stat"><span class="stat-val">91</span><span class="stat-lbl">Skills Tracked</span></div>
+  <div class="stat"><span class="stat-val">6</span><span class="stat-lbl">Active Job Listings</span></div>
+</div>
+
+<!-- Coverage by Category -->
+<h3>Coverage by Skill Category</h3>
+<table>
+<tr><th>Category</th><th>Coverage</th><th>Bar</th></tr>
+<tr><td><strong>Architecture & System Design</strong></td><td>4/19 (21%)</td><td><div style="width:200px;height:14px;background:var(--bg3);border-radius:7px;overflow:hidden"><div style="width:21%;height:100%;background:var(--red);border-radius:7px"></div></div></td></tr>
+<tr><td><strong>Cloud & Infrastructure</strong></td><td>3/21 (14%)</td><td><div style="width:200px;height:14px;background:var(--bg3);border-radius:7px;overflow:hidden"><div style="width:14%;height:100%;background:var(--red);border-radius:7px"></div></div></td></tr>
+<tr><td><strong>AI & ML Engineering</strong></td><td>4/20 (20%)</td><td><div style="width:200px;height:14px;background:var(--bg3);border-radius:7px;overflow:hidden"><div style="width:20%;height:100%;background:var(--red);border-radius:7px"></div></div></td></tr>
+<tr><td><strong>Programming & Databases</strong></td><td>1/18 (6%)</td><td><div style="width:200px;height:14px;background:var(--bg3);border-radius:7px;overflow:hidden"><div style="width:6%;height:100%;background:var(--red);border-radius:7px"></div></div></td></tr>
+<tr><td><strong>Leadership & Process</strong></td><td>6/13 (46%)</td><td><div style="width:200px;height:14px;background:var(--bg3);border-radius:7px;overflow:hidden"><div style="width:46%;height:100%;background:var(--accent);border-radius:7px"></div></div></td></tr>
+</table>
+
+<!-- Job Openings -->
+<h2 id="job-openings">Job Openings (Last 24h)</h2>
+<table>
+<tr><th>Title</th><th>Company</th><th>Location</th><th>Source</th></tr>
+<tr><td><a href="https://linkedin.com/jobs/view/1" target="_blank" rel="noopener">AI Architect</a></td><td>Google</td><td>Mountain View, CA</td><td><span class="tag tag-c">LinkedIn</span></td></tr>
+<tr><td><a href="https://linkedin.com/jobs/view/2" target="_blank" rel="noopener">Senior AI/ML Architect</a></td><td>Microsoft</td><td>Redmond, WA</td><td><span class="tag tag-c">LinkedIn</span></td></tr>
+<tr><td><a href="https://linkedin.com/jobs/view/3" target="_blank" rel="noopener">DevOps Architect</a></td><td>Amazon</td><td>Seattle, WA</td><td><span class="tag tag-c">LinkedIn</span></td></tr>
+<tr><td><a href="https://linkedin.com/jobs/view/4" target="_blank" rel="noopener">Cloud Architect</a></td><td>Netflix</td><td>Los Gatos, CA</td><td><span class="tag tag-c">LinkedIn</span></td></tr>
+<tr><td><a href="https://linkedin.com/jobs/view/5" target="_blank" rel="noopener">Senior Engineering Manager</a></td><td>Meta</td><td>Menlo Park, CA</td><td><span class="tag tag-c">LinkedIn</span></td></tr>
+<tr><td><a href="https://naukri.com/jobs/view/6" target="_blank" rel="noopener">AI/Cloud Architect</a></td><td>Infosys</td><td>Bangalore, India</td><td><span class="tag tag-o">Naukri</span></td></tr>
+</table>
+
+<!-- Skill Gaps -->
+<h2 id="skill-gaps">Skill Gaps & Missing Coverage</h2>
+<p>These skills appear in job descriptions but are <strong>not yet covered</strong> in your interview prep content. Click to search for resources.</p>
+<div style="margin:10px 0"><a href="https://www.google.com/search?q=interview+prep+ai+agents" target="_blank" rel="noopener"><span class="skill-chip red">ai agents</span></a> <a href="https://www.google.com/search?q=interview+prep+ansible" target="_blank" rel="noopener"><span class="skill-chip red">ansible</span></a> <a href="https://www.google.com/search?q=interview+prep+api+gateway" target="_blank" rel="noopener"><span class="skill-chip red">api gateway</span></a> <a href="https://www.google.com/search?q=interview+prep+architecture+patterns" target="_blank" rel="noopener"><span class="skill-chip red">architecture patterns</span></a> <a href="https://www.google.com/search?q=interview+prep+argocd" target="_blank" rel="noopener"><span class="skill-chip red">argocd</span></a> <a href="https://www.google.com/search?q=interview+prep+attention+mechanism" target="_blank" rel="noopener"><span class="skill-chip red">attention mechanism</span></a> <a href="https://www.google.com/search?q=interview+prep+autogpt" target="_blank" rel="noopener"><span class="skill-chip red">autogpt</span></a> <a href="https://www.google.com/search?q=interview+prep+aws" target="_blank" rel="noopener"><span class="skill-chip red">aws</span></a> <a href="https://www.google.com/search?q=interview+prep+azure" target="_blank" rel="noopener"><span class="skill-chip red">azure</span></a> <a href="https://www.google.com/search?q=interview+prep+caching" target="_blank" rel="noopener"><span class="skill-chip red">caching</span></a> <a href="https://www.google.com/search?q=interview+prep+cap+theorem" target="_blank" rel="noopener"><span class="skill-chip red">cap theorem</span></a> <a href="https://www.google.com/search?q=interview+prep+cassandra" target="_blank" rel="noopener"><span class="skill-chip red">cassandra</span></a> <a href="https://www.google.com/search?q=interview+prep+cdn" target="_blank" rel="noopener"><span class="skill-chip red">cdn</span></a> <a href="https://www.google.com/search?q=interview+prep+ci/cd" target="_blank" rel="noopener"><span class="skill-chip red">ci/cd</span></a> <a href="https://www.google.com/search?q=interview+prep+circuit+breaker" target="_blank" rel="noopener"><span class="skill-chip red">circuit breaker</span></a> </div>
+</div>
+
+</div>
+
 </div>
 </nav>
+<style>
+/* -- Job Intelligence Tab -- */
+.stat{display:inline-block;margin:8px 12px 8px 0;padding:12px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;min-width:140px}
+.stat-val{display:block;font-size:22px;font-weight:700;color:var(--accent)}
+.stat-lbl{display:block;font-size:11px;color:var(--text3);margin-top:2px}
+.info-crd{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.skill-chip{display:inline-block;padding:4px 12px;margin:3px 4px;font-size:12px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all 0.12s}
+.skill-chip:hover{border-color:var(--accent);color:var(--text)}
+.skill-chip.red{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,0.08)}
+.skill-chip.red:hover{background:rgba(239,68,68,0.15)}
+.tag{display:inline-block;padding:2px 8px;font-size:10px;border-radius:4px;font-weight:600}
+.tag-c{background:rgba(10,102,194,0.15);color:#0a66c2}
+.tag-o{background:rgba(255,130,0,0.15);color:#ff8200}
+</style>
 <script>
 function switchTab(name){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
