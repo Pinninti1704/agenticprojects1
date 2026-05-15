@@ -231,7 +231,7 @@ hr{margin:40px 0;border:none;border-top:1px solid var(--border)}
 <p><strong>The three-pronged strategy:</strong></p>
 <ol><li><strong>Move universal knowledge out</strong> â€” into MCP servers</li><li><strong>Load details on demand</strong> â€” via Skills progressive disclosure</li><li><strong>Isolate execution via forking</strong> â€” subagents keep Main Context clean</li></ol>
 <h3 id="version-evolution-timeline">Version Evolution Timeline</h3>
-<table><tr><th>Date</th><th>Version</th><th>Milestone</th></tr><tr><td>Before 0.2.31</td><td>â€”</td><td>MCP foundation (open standard)</td></tr><tr><td>2025-04-02</td><td>v0.2.31</td><td>Slash Commands introduced</td></tr><tr><td>2025-07-24</td><td>v1.0.60</td><td>Custom Subagents</td></tr><tr><td>2025-10-16</td><td>v2.0.20</td><td>Skills introduced (auto-detection + bundles)</td></tr><tr><td>2026-01-07</td><td>v2.1.0</td><td>Skills 2.0 â€” fork context + agent specification</td></tr><tr><td>2026-01-09</td><td>v2.1.3</td><td>Commands &amp; Skills merged under one model</td></tr></table>
+<table><tr><th>Date</th><th>Version</th><th>Milestone</th></tr><tr><td>2026-01-07</td><td>v2.1.0</td><td>Skills 2.0 â€” fork context + agent specification</td></tr><tr><td>2026-01-09</td><td>v2.1.3</td><td>Commands &amp; Skills merged under one model</td></tr><tr><td>2026-04-03</td><td>v2.1.91</td><td>MCP result-size override, computer use in CLI</td></tr><tr><td>2026-05-11</td><td>v2.1.139</td><td>Agent View, background sessions, /goal</td></tr></table>
 <hr>
 <h2 id="2-complete-feature-catalog">2. Complete Feature Catalog</h2>
 <h3 id="21-agent-loop-execution-model">2.1 Agent Loop &amp; Execution Model</h3>
@@ -1271,7 +1271,7 @@ Layer 4 â€” Isolation: context: fork runs in separate subagent context
 <table>
 <tr><th>Resource</th><th>Type</th><th>Focus</th><th>Format</th><th>What Makes It Valuable</th></tr>
 <tr><td><strong><a href="https://roadmap.sh/ai-agents" target="_blank" rel="noopener">roadmap.sh/ai-agents</a></strong></td><td>Learning Roadmap</td><td>AI Agent developer skills path</td><td>Interactive step-by-step guide</td><td>Best structured learning path for AI agent development. Covers fundamentals through advanced deployment. Community-vetted roadmap with resources at each stage. Most accessible starting point for newcomers.</td></tr>
-<tr><td><strong><a href="https://github.com/kyrolabs/awesome-agents" target="_blank" rel="noopener">kyrolabs/awesome-agents</a></strong></td><td>Awesome List</td><td>General AI agent ecosystem</td><td>GitHub README</td><td>The original &amp; most-starred awesome list for AI agents (~20K stars). Broad coverage: frameworks, platforms, tools, videos, books. Updated through early 2025.</td></tr>
+<tr><td><strong><a href="https://github.com/kyrolabs/awesome-agents" target="_blank" rel="noopener">kyrolabs/awesome-agents</a></strong></td><td>Awesome List</td><td>General AI agent ecosystem</td><td>GitHub README</td><td>The original &amp; most-starred awesome list for AI agents (~20K stars). Broad coverage: frameworks, platforms, tools, videos, books.</td></tr>
 <tr><td><strong><a href="https://github.com/e2b-dev/awesome-ai-agents" target="_blank" rel="noopener">e2b-dev/awesome-ai-agents</a></strong></td><td>Awesome List</td><td>Autonomous agents &amp; sandboxed execution</td><td>GitHub README</td><td>Focus on autonomous agents (AutoGPT, BabyAGI lineage) + code-interpreting agents. Strong on agent sandboxing, cloud execution environments. ~8K stars.</td></tr>
 <tr><td><strong><a href="https://github.com/slavakurilyak/awesome-ai-agents" target="_blank" rel="noopener">slavakurilyak/awesome-ai-agents</a></strong></td><td>Awesome List</td><td>300+ agentic AI resources</td><td>GitHub README</td><td>Most comprehensive curated list by volume (300+ entries). Covers coding agents, multi-agent, browser agents, voice agents, creative AI, protocols (MCP, A2A, GNAP), OSS models, safety, governance, healthcare, cybersecurity, market stats.</td></tr>
 <tr><td><strong><a href="https://github.com/caramaschiHG/awesome-ai-agents-2026" target="_blank" rel="noopener">caramaschiHG/awesome-ai-agents-2026</a></strong></td><td>Awesome List</td><td>2026-curated AI agents</td><td>GitHub README</td><td>Most current list (2026). Focus on production-ready frameworks and tools. Good complement to this page for staying current with the latest releases.</td></tr>
@@ -1325,7 +1325,7 @@ Layer 4 â€” Isolation: context: fork runs in separate subagent context
 <li><strong>Automatically enables interleaved thinking</strong> â€” no beta header needed</li>
 <li>Model adapts reasoning depth to problem complexity</li>
 <li>Cost-quality tradeoffs become first-class controls</li>
-<li>Removes need for <code>interleaved-thinking-2025-05-14</code> beta header</li>
+<li>Removes need for the deprecated <code>interleaved-thinking</code> beta header</li>
 </ul>
 
 <h3 id="11-3-context-compaction-api">11.3 Context Compaction API (Beta)</h3>
@@ -1448,8 +1448,8 @@ Layer 4 â€” Isolation: context: fork runs in separate subagent context
 <tr><td>Opus 4.6 MRCR at 256K</td><td>93%</td><td>Anthropic</td></tr>
 <tr><td>Opus 4.6 MRCR at 1M</td><td>76%</td><td>Anthropic</td></tr>
 <tr><td>Sonnet 4.5 MRCR at 256K</td><td>10.8%</td><td>Anthropic</td></tr>
-<tr><td>Multi-agent performance gain</td><td>90.2%</td><td>Anthropic 2025</td></tr>
-<tr><td>Multi-agent cost increase</td><td>15x</td><td>Anthropic 2025</td></tr>
+<tr><td>Multi-agent performance gain</td><td>90.2%</td><td>Anthropic</td></tr>
+<tr><td>Multi-agent cost increase</td><td>15x</td><td>Anthropic</td></tr>
 <tr><td>50% time horizon (Opus 4.6)</td><td>14h 30m</td><td>METR</td></tr>
 <tr><td>GDPval-AA Elo improvement</td><td>+190 over 4.5</td><td>Anthropic</td></tr>
 <tr><td>Terminal-Bench 2.0</td><td>65.4% (highest)</td><td>Claude</td></tr>
@@ -1588,7 +1588,7 @@ Sources: Claude Code official docs, Anthropic engineering blogs, production case
 </ul>
 <p><strong>Decision framework:</strong> Use an agent when the task is open-ended and autonomous tool use is needed. Use a workflow when the process has well-defined steps and explicit control over execution order is required.</p>
 
-<h2 id="14-multi-agent-patterns">14. Advanced Multi-Agent Orchestration Patterns</h2>
+<h2 id="14-multi-agent-patterns">15. Advanced Multi-Agent Orchestration Patterns</h2>
 
 <!-- Multi-Agent Pattern Comparison - Mermaid -->
 
@@ -1959,8 +1959,8 @@ Sources: Claude Code official docs, Anthropic engineering blogs, production case
 <tr><td>Opus 4.6 MRCR at 256K</td><td>93%</td><td>Anthropic</td></tr>
 <tr><td>Opus 4.6 MRCR at 1M</td><td>76%</td><td>Anthropic</td></tr>
 <tr><td>Sonnet 4.5 MRCR at 256K</td><td>10.8%</td><td>Anthropic</td></tr>
-<tr><td>Multi-agent performance gain</td><td>90.2%</td><td>Anthropic 2025</td></tr>
-<tr><td>Multi-agent cost increase</td><td>15x</td><td>Anthropic 2025</td></tr>
+<tr><td>Multi-agent performance gain</td><td>90.2%</td><td>Anthropic</td></tr>
+<tr><td>Multi-agent cost increase</td><td>15x</td><td>Anthropic</td></tr>
 <tr><td>50% time horizon (Opus 4.6)</td><td>14h 30m</td><td>METR</td></tr>
 <tr><td>GDPval-AA Elo improvement</td><td>+190 over 4.5</td><td>Anthropic</td></tr>
 <tr><td>Terminal-Bench 2.0</td><td>65.4% (highest)</td><td>Claude</td></tr>
@@ -4691,17 +4691,10 @@ Tool  MCP  Comp  Code Voice Workf Mem  Sim   Obs   Multi
 
 <h4>Key Research Papers on Multi-Agent Systems</h4>
 <table>
-<tr><th>Paper / Area</th><th>Venue</th><th>Focus</th></tr>
-<tr><td><strong>MetaGPT</strong></td><td>ICLR 2024</td><td>Role-based software company simulation</td></tr>
-<tr><td><strong>ChatDev</strong></td><td>ACL 2024</td><td>Virtual software company via conversation chains</td></tr>
-<tr><td><strong>Tree of Thoughts</strong></td><td>NeurIPS 2023</td><td>Deliberate reasoning via tree search</td></tr>
-<tr><td><strong>HuggingGPT</strong></td><td>NeurIPS 2023</td><td>LLM as orchestrator of ML models</td></tr>
-<tr><td><strong>ReWOO</strong></td><td>ICML 2024</td><td>Modular reasoning-without-observation</td></tr>
-<tr><td><strong>GPTSwarm</strong></td><td>ICML 2024</td><td>Graph-based swarm optimization</td></tr>
-<tr><td><strong>AFlow</strong></td><td>ICLR 2025</td><td>Monte Carlo tree search for workflow design</td></tr>
-<tr><td><strong>Self-Evolving Networks</strong></td><td>ICLR 2025</td><td>Autonomous multi-agent evolution</td></tr>
-<tr><td><strong>ADAS</strong></td><td>ICLR 2025</td><td>Automated design of agentic systems</td></tr>
-<tr><td><strong>CORAL</strong></td><td>2025</td><td>First autonomous multi-agent evolution framework</td></tr>
+<tr><th>Paper / Approach</th><th>Year</th><th>Focus</th></tr>
+<tr><td><strong>AFlow</strong></td><td>2025</td><td>Monte Carlo tree search for workflow design</td></tr>
+<tr><td><strong>ADAS</strong></td><td>2025</td><td>Automated design of agentic systems</td></tr>
+<tr><td><strong>CORAL</strong></td><td>2025</td><td>Autonomous multi-agent evolution framework</td></tr>
 </table>
 
 <h4>New Agent Patterns & Concepts Worth Learning</h4>
@@ -5982,7 +5975,7 @@ b269a8f feat: add Azure AI Foundry provider support</pre>
 <li><strong>Prompts</strong> â€” Pre-defined prompt templates: <code>prompts/list</code>, <code>prompts/get</code>. Used for workflow scaffolding.</li>
 <li><strong>Sampling</strong> â€” Server-initiated LLM requests back to the client for dynamic prompt generation.</li>
 </ul>
-<p><strong>Protocol versions supported</strong> (as of 2026): <code>2025-11-25</code>, <code>2025-06-18</code>, <code>2025-03-26</code>, <code>2024-11-05</code>.</p>
+<p><strong>Protocol versions supported</strong> (as of 2026): <code>2025-11-25</code> (current), <code>2025-06-18</code>.</p>
 <hr>
 <h3 id="arch-servers">12.2 modelcontextprotocol/servers â€” Reference Implementation Architecture</h3>
 <table>
