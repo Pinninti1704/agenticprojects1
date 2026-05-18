@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Questions — AI Architect &amp; Cloud Roles</title>
+<style>
+:root{--bg:#0b0d14;--bg2:#12141e;--bg3:#1a1d2e;--border:#262a3a;--accent:#6c8cff;--accent2:#e879f9;--text:#e8ecf4;--text2:#9ba1b8;--text3:#6b7280;--cyan:#22d3ee;--green:#22c55e;--red:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,sans-serif;background:var(--bg);color:var(--text);padding:40px 24px;line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto}
+h1{font-size:28px;margin-bottom:4px}
+h2{font-size:20px;margin:28px 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{font-size:16px;margin:24px 0 10px;color:var(--text2)}
+p{color:var(--text2);font-size:14px;margin-bottom:16px}
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.back-link{display:inline-block;margin-bottom:20px;font-size:13px;color:var(--text3)}
+.back-link:hover{color:var(--accent)}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:var(--bg2)}
+tr:hover{background:var(--bg2)}
+.rel-tag{display:inline-block;padding:1px 8px;font-size:10px;border-radius:8px;background:rgba(108,140,255,0.12);color:var(--accent);border:1px solid rgba(108,140,255,0.2);white-space:nowrap}
+.collapsible{margin:6px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.coll-header{padding:10px 14px;background:var(--bg2);cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none}
+.coll-header:hover{background:var(--bg3)}
+.coll-arrow{font-size:10px;color:var(--text3);transition:transform 0.15s}
+.coll-header.open .coll-arrow{transform:rotate(90deg)}
+.coll-stat{margin-left:auto;font-size:12px;color:var(--text3)}
+.coll-body{display:none;padding:4px 14px 14px}
+.coll-body.open{display:block}
+.q-item{padding:8px 10px;margin:4px 0;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:13px;display:flex;align-items:flex-start;gap:10px}
+.q-num{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;background:var(--accent);color:var(--bg);font-size:11px;font-weight:700;border-radius:4px;flex-shrink:0;margin-top:1px}
+.info-crd{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.stat{display:inline-block;margin:8px 12px 8px 0;padding:12px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;min-width:150px}
+.stat-val{display:block;font-size:24px;font-weight:700;color:var(--accent)}
+.stat-lbl{display:block;font-size:11px;color:var(--text3);margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back-link" href="claude-code-website_test1.html">&larr; Back to Interview Prep</a>
+<h1>Interview Questions &amp; Resources</h1>
+<p><strong>Last updated:</strong> 2026-05-18 04:53 UTC | Curated interview questions and learning resources for AI Architect, DevOps Architect, Cloud Architect, and Senior Engineering Manager roles.</p>
+<hr>
+
+<div class="info-crd">
+  <div class="stat"><span class="stat-val">50</span><span class="stat-lbl">Curated Questions</span></div>
+  <div class="stat"><span class="stat-val">6</span><span class="stat-lbl">YouTube Playlists</span></div>
+  <div class="stat"><span class="stat-val">8</span><span class="stat-lbl">GitHub Repos</span></div>
+  <div class="stat"><span class="stat-val">12</span><span class="stat-lbl">Articles &amp; Posts</span></div>
+</div>
+
+<h2 id="questions">Interview Questions by Category</h2>
+<p>Click each category to expand. These are common architectural interview questions for senior and architect-level roles.</p>
+
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>System Design</strong>
+    <span class="coll-stat">10 questions</span>
+  </div>
+  <div class="coll-body"><div class="q-item"><span class="q-num">01</span><span>Design a URL shortener (like bit.ly) -- discuss trade-offs between hashing strategies</span></div>
+<div class="q-item"><span class="q-num">02</span><span>Design WhatsApp / real-time chat -- WebSockets vs polling, message ordering, persistence</span></div>
+<div class="q-item"><span class="q-num">03</span><span>Design Netflix / YouTube -- video transcoding pipeline, CDN strategy, recommendation serving</span></div>
+<div class="q-item"><span class="q-num">04</span><span>Design Uber -- geo-spatial indexing, ride matching, real-time tracking</span></div>
+<div class="q-item"><span class="q-num">05</span><span>Design a distributed key-value store -- consistent hashing, replication, CAP trade-offs</span></div>
+<div class="q-item"><span class="q-num">06</span><span>Design a rate limiter -- token bucket vs sliding window, distributed counters</span></div>
+<div class="q-item"><span class="q-num">07</span><span>Design Dropbox / Google Drive -- file sync, conflict resolution, chunking</span></div>
+<div class="q-item"><span class="q-num">08</span><span>Design Twitter feed -- push vs pull model, fanout strategy, timeline generation</span></div>
+<div class="q-item"><span class="q-num">09</span><span>Design a payment system -- idempotency, dual-write problem, Exactly-Once delivery</span></div>
+<div class="q-item"><span class="q-num">10</span><span>Design a notification system -- push/SMS/email, templating, delivery guarantees</span></div>
+</div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Cloud Architecture</strong>
+    <span class="coll-stat">10 questions</span>
+  </div>
+  <div class="coll-body"><div class="q-item"><span class="q-num">01</span><span>Design a multi-region active-active architecture on AWS</span></div>
+<div class="q-item"><span class="q-num">02</span><span>How would you migrate a monolith to microservices on EKS?</span></div>
+<div class="q-item"><span class="q-num">03</span><span>Design a cost-optimized data lake on AWS (S3 + Glue + Athena vs Redshift)</span></div>
+<div class="q-item"><span class="q-num">04</span><span>How do you handle secrets management across environments?</span></div>
+<div class="q-item"><span class="q-num">05</span><span>Design a serverless event-driven pipeline for real-time analytics</span></div>
+<div class="q-item"><span class="q-num">06</span><span>How would you implement disaster recovery with RPO under 1 minute?</span></div>
+<div class="q-item"><span class="q-num">07</span><span>Design a VPC architecture with private subnets, NAT gateways, Transit Gateway</span></div>
+<div class="q-item"><span class="q-num">08</span><span>How do you handle blue-green and canary deployments on EKS?</span></div>
+<div class="q-item"><span class="q-num">09</span><span>Design a CI/CD pipeline with GitHub Actions, ArgoCD, EKS</span></div>
+<div class="q-item"><span class="q-num">10</span><span>How would you implement observability across 50+ microservices?</span></div>
+</div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>AI / ML Architecture</strong>
+    <span class="coll-stat">10 questions</span>
+  </div>
+  <div class="coll-body"><div class="q-item"><span class="q-num">01</span><span>Design a RAG pipeline for enterprise document Q&A</span></div>
+<div class="q-item"><span class="q-num">02</span><span>How would you architect a multi-agent system for customer support?</span></div>
+<div class="q-item"><span class="q-num">03</span><span>Design a model serving infrastructure with A/B testing capability</span></div>
+<div class="q-item"><span class="q-num">04</span><span>How do you handle LLM prompt injection and guardrails in production?</span></div>
+<div class="q-item"><span class="q-num">05</span><span>Design a feature store for ML models serving 100k QPS</span></div>
+<div class="q-item"><span class="q-num">06</span><span>How would you implement fine-tuning pipeline for domain-specific LLMs?</span></div>
+<div class="q-item"><span class="q-num">07</span><span>Design a vector search system for semantic similarity at scale</span></div>
+<div class="q-item"><span class="q-num">08</span><span>How do you evaluate and monitor LLM outputs in production?</span></div>
+<div class="q-item"><span class="q-num">09</span><span>Design a data pipeline for continuous model retraining</span></div>
+<div class="q-item"><span class="q-num">10</span><span>How would you architect MCP (Model Context Protocol) servers for tool use?</span></div>
+</div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>DevOps & SRE</strong>
+    <span class="coll-stat">10 questions</span>
+  </div>
+  <div class="coll-body"><div class="q-item"><span class="q-num">01</span><span>How do you design a Kubernetes cluster for high availability?</span></div>
+<div class="q-item"><span class="q-num">02</span><span>Design a GitOps workflow with ArgoCD across 10+ clusters</span></div>
+<div class="q-item"><span class="q-num">03</span><span>How do you handle incident management and on-call rotation at scale?</span></div>
+<div class="q-item"><span class="q-num">04</span><span>Design a monitoring and alerting system using Prometheus + Grafana</span></div>
+<div class="q-item"><span class="q-num">05</span><span>How do you implement policy-as-a-service with OPA / Kyverno?</span></div>
+<div class="q-item"><span class="q-num">06</span><span>Design a secrets rotation strategy without downtime</span></div>
+<div class="q-item"><span class="q-num">07</span><span>How do you debug a Pod that is CrashLoopBackOff in production?</span></div>
+<div class="q-item"><span class="q-num">08</span><span>Design a multi-tenant Kubernetes cluster with RBAC and network policies</span></div>
+<div class="q-item"><span class="q-num">09</span><span>How would you implement canary releases with traffic splitting?</span></div>
+<div class="q-item"><span class="q-num">10</span><span>Design a disaster recovery drill process for Kubernetes workloads</span></div>
+</div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Leadership & Process</strong>
+    <span class="coll-stat">10 questions</span>
+  </div>
+  <div class="coll-body"><div class="q-item"><span class="q-num">01</span><span>How do you drive technical strategy across multiple teams?</span></div>
+<div class="q-item"><span class="q-num">02</span><span>How do you handle a team that consistently misses sprint commitments?</span></div>
+<div class="q-item"><span class="q-num">03</span><span>Design a hiring process for senior engineering roles</span></div>
+<div class="q-item"><span class="q-num">04</span><span>How do you manage technical debt while delivering features?</span></div>
+<div class="q-item"><span class="q-num">05</span><span>How do you foster a culture of incident post-mortems without blame?</span></div>
+<div class="q-item"><span class="q-num">06</span><span>How do you prioritize between platform work and product features?</span></div>
+<div class="q-item"><span class="q-num">07</span><span>Design an architecture review process for a 50-engineer org</span></div>
+<div class="q-item"><span class="q-num">08</span><span>How do you handle disagreements with PMs on technical direction?</span></div>
+<div class="q-item"><span class="q-num">09</span><span>How do you mentor senior engineers to become architects?</span></div>
+<div class="q-item"><span class="q-num">10</span><span>How do you measure engineering team health and productivity?</span></div>
+</div>
+</div>
+
+<h2 id="youtube">YouTube Playlists &amp; Tutorials</h2>
+<table>
+<tr><th>Title</th><th>Area</th><th>Description</th></tr>
+<tr><td><a href="https://www.youtube.com/playlist?list=PLCRpJF4DOnDl7bMwm2wFJ2lKdRwjVhJ7g" target="_blank" rel="noopener" style="color:var(--accent)">System Design Interview — ByteByteGo</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">Deep dives into system design concepts by Alex Xu</td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=Ia-UEYYR44s" target="_blank" rel="noopener" style="color:var(--accent)">AWS Solutions Architect — freeCodeCamp</a></td><td><span class="rel-tag">Cloud</span></td><td style="color:var(--text2);font-size:12px">Full AWS Solutions Architect course (10 hours)</td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=X48VuDVv0do" target="_blank" rel="noopener" style="color:var(--accent)">Kubernetes Tutorial — TechWorldWithNana</a></td><td><span class="rel-tag">Cloud / DevOps</span></td><td style="color:var(--text2);font-size:12px">Complete Kubernetes crash course</td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=8BPDvOo0Lr4" target="_blank" rel="noopener" style="color:var(--accent)">Microservices Architecture — Programming with Mosh</a></td><td><span class="rel-tag">Architecture</span></td><td style="color:var(--text2);font-size:12px">Microservices design patterns and architecture</td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=EsTrWCV0Ph4" target="_blank" rel="noopener" style="color:var(--accent)">AI Agents Full Course 2026</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">Master Agentic AI in 2 hours</td></tr>
+<tr><td><a href="https://www.youtube.com/watch?v=F2FmTdLtb_4" target="_blank" rel="noopener" style="color:var(--accent)">System Design Concepts — freeCodeCamp</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">System design fundamentals interview prep</td></tr>
+</table>
+
+<h2 id="github">GitHub Repositories</h2>
+<table>
+<tr><th>Repository</th><th>Area</th><th>Description</th></tr>
+<tr><td><a href="https://github.com/donnemartin/system-design-primer" target="_blank" rel="noopener" style="color:var(--accent)">system-design-primer</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">Learn to design large-scale systems (280k+ stars)</td></tr>
+<tr><td><a href="https://github.com/donnemartin/awesome-aws" target="_blank" rel="noopener" style="color:var(--accent)">awesome-aws</a></td><td><span class="rel-tag">Cloud</span></td><td style="color:var(--text2);font-size:12px">Curated AWS tools and best practices</td></tr>
+<tr><td><a href="https://github.com/offergenieai/DevOps-Interview-Questions" target="_blank" rel="noopener" style="color:var(--accent)">DevOps-Interview-Questions</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">DevOps & SRE interview questions 2026</td></tr>
+<tr><td><a href="https://github.com/SRE-23/devops-sre-interview-prep" target="_blank" rel="noopener" style="color:var(--accent)">devops-sre-interview-prep</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">SRE interview preparation with scenarios</td></tr>
+<tr><td><a href="https://github.com/AvikCodeCrafter/DevOps-SRE-Interview-Questions" target="_blank" rel="noopener" style="color:var(--accent)">DevOps-SRE-Interview-Questions</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">Real DevOps & SRE interview questions with answers</td></tr>
+<tr><td><a href="https://github.com/softwareenterprisearchitect/devops-interview-questions" target="_blank" rel="noopener" style="color:var(--accent)">devops-interview-questions</a></td><td><span class="rel-tag">Architecture</span></td><td style="color:var(--text2);font-size:12px">Enterprise architect DevOps interview questions</td></tr>
+<tr><td><a href="https://github.com/iamrohitlad/Devops-Interview-2026" target="_blank" rel="noopener" style="color:var(--accent)">Devops-Interview-2026</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">DevOps interview prep 2026 edition</td></tr>
+<tr><td><a href="https://github.com/girijesh-ai/ai-interview-codex" target="_blank" rel="noopener" style="color:var(--accent)">girijesh-ai/ai-interview-codex</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">Comprehensive ML/AI interview preparation</td></tr>
+</table>
+
+<h2 id="articles">Articles &amp; Blog Posts</h2>
+<table>
+<tr><th>Title</th><th>Area</th><th>Source</th></tr>
+<tr><td><a href="https://medium.com/artificial-intelligence-ai-uncovered/top-20-ai-architect-interview-questions-dfe6bc0560b6" target="_blank" rel="noopener" style="color:var(--accent)">Top 20 AI Architect Interview Questions</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">Medium (AI Uncovered)</td></tr>
+<tr><td><a href="https://www.educative.io/blog/system-design-interview-questions" target="_blank" rel="noopener" style="color:var(--accent)">Top 30 System Design Interview Questions in 2026</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">Educative</td></tr>
+<tr><td><a href="https://blog.devops.dev/71-sre-interview-questions-you-must-prepare-in-2026-beginner-to-expert-23372a282431" target="_blank" rel="noopener" style="color:var(--accent)">71 SRE Interview Questions You Must Prepare in 2026</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">Medium (DevOps.dev)</td></tr>
+<tr><td><a href="https://www.tredence.com/blog/top-20-ai-machine-learning-interview-questions-2026" target="_blank" rel="noopener" style="color:var(--accent)">Top 20 AI & ML Interview Questions for 2026</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">Tredence</td></tr>
+<tr><td><a href="https://www.cvowl.com/blog/ai-systems-architect-interview-questions-answers" target="_blank" rel="noopener" style="color:var(--accent)">Top AI Systems Architect Interview Questions 2026</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">CV Owl</td></tr>
+<tr><td><a href="https://www.resumegyani.com/interview-questions/ai-architect" target="_blank" rel="noopener" style="color:var(--accent)">Top AI Architect Interview Questions & Answers 2026</a></td><td><span class="rel-tag">AI / ML</span></td><td style="color:var(--text2);font-size:12px">ResumeGyani</td></tr>
+<tr><td><a href="https://precisionaiacademy.com/blog/system-design-interview-guide-2026" target="_blank" rel="noopener" style="color:var(--accent)">System Design Interview Guide 2026</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">Precision AI Academy</td></tr>
+<tr><td><a href="https://aiu.ac/2026/04/02/system-design-interview-questions-2026/" target="_blank" rel="noopener" style="color:var(--accent)">System Design Interview Questions 2026</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">AIU</td></tr>
+<tr><td><a href="https://dev.to/somadevtoo/is-bytebytego-a-good-place-for-system-design-interview-prep-in-2026-9fo" target="_blank" rel="noopener" style="color:var(--accent)">ByteByteGo for System Design Interview Prep 2026</a></td><td><span class="rel-tag">System Design</span></td><td style="color:var(--text2);font-size:12px">Dev.to</td></tr>
+<tr><td><a href="https://medium.com/@deepaktiwari21/devops-sre-interview-questions-i-encountered-with-detailed-answers-f5b96ae99c29" target="_blank" rel="noopener" style="color:var(--accent)">DevOps & SRE Interview Questions (Detailed Answers)</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">Medium</td></tr>
+</table>
+
+<h2 id="linkedin">LinkedIn Articles</h2>
+<table>
+<tr><th>Title</th><th>Area</th><th>Description</th></tr>
+<tr><td><a href="https://www.linkedin.com/posts/rohit-ghumare_this-github-repo-is-a-gold-mine-for-devops-activity-7377569180897918976-Qhpr" target="_blank" rel="noopener" style="color:var(--accent)">700+ DevOps & SRE Questions GitHub Repo</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">GitHub repo gold mine for DevOps & SRE engineers</td></tr>
+<tr><td><a href="https://www.linkedin.com/posts/abhishek-kumar-singh-02208a153_argocd-devops-gitops-activity-7457638620569530368-ZNHP" target="_blank" rel="noopener" style="color:var(--accent)">Argo CD DevOps Interview Questions</a></td><td><span class="rel-tag">DevOps</span></td><td style="color:var(--text2);font-size:12px">GitOps and ArgoCD interview Q&A</td></tr>
+</table>
+
+</div>
+</body>
+</html>

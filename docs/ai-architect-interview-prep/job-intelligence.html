@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Intelligence — Interview Prep Coverage</title>
+<style>
+:root{--bg:#0b0d14;--bg2:#12141e;--bg3:#1a1d2e;--border:#262a3a;--accent:#6c8cff;--accent2:#e879f9;--text:#e8ecf4;--text2:#9ba1b8;--text3:#6b7280;--cyan:#22d3ee;--green:#22c55e;--red:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,sans-serif;background:var(--bg);color:var(--text);padding:40px 24px;line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto}
+h1{font-size:28px;margin-bottom:4px}
+h2{font-size:20px;margin:28px 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px}
+h3{font-size:16px;margin:24px 0 10px;color:var(--text2)}
+p{color:var(--text2);font-size:14px;margin-bottom:16px}
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.info-crd{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.stat{display:inline-block;margin:8px 12px 8px 0;padding:12px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;min-width:150px}
+.stat-val{display:block;font-size:24px;font-weight:700;color:var(--accent)}
+.stat-lbl{display:block;font-size:11px;color:var(--text3);margin-top:2px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:var(--bg2)}
+tr:hover{background:var(--bg2)}
+.bar-bg{width:160px;height:12px;background:var(--bg3);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;transition:width 0.4s}
+.skill-chip{display:inline-block;padding:4px 12px;margin:3px 4px;font-size:12px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all 0.12s}
+.skill-chip:hover{border-color:var(--accent);color:var(--text)}
+.skill-chip.red{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,0.08);user-select:none;cursor:default}
+.skill-chip.red:hover{background:rgba(239,68,68,0.15)}
+.gap-row .skill-chip{margin:2px 3px;cursor:pointer}
+.skill-badge{display:inline-block;padding:1px 7px;margin:1px 2px;font-size:10px;border-radius:8px;background:rgba(108,140,255,0.12);color:var(--accent);border:1px solid rgba(108,140,255,0.2);white-space:nowrap}
+.skill-wrap{max-height:48px;overflow-y:auto}
+.back-link{display:inline-block;margin-bottom:20px;font-size:13px;color:var(--text3)}
+.back-link:hover{color:var(--accent)}
+.collapsible{margin:6px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.coll-header{padding:10px 14px;background:var(--bg2);cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none}
+.coll-header:hover{background:var(--bg3)}
+.coll-arrow{font-size:10px;color:var(--text3);transition:transform 0.15s}
+.coll-header.open .coll-arrow{transform:rotate(90deg)}
+.coll-stat{margin-left:auto;font-size:12px;color:var(--text3)}
+.coll-body{display:none;padding:4px 14px 10px}
+.coll-body.open{display:block}
+.skill-detail td{border:none;padding:3px 6px;font-size:13px}
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:12px 0}
+.company-item{padding:8px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.company-count{font-size:11px;color:var(--text3)}
+
+<style>
+.ref-group{padding:8px 12px;margin:6px 0;background:var(--bg2);border:1px solid var(--border);border-radius:8px}
+.ref-link{display:inline-block;margin:2px 8px 2px 0;font-size:13px;padding:2px 0}
+.ref-yt{color:#ff5555!important}
+.ref-gh{color:var(--text)!important}
+.ref-art{color:var(--accent)!important}
+</style>
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back-link" href="claude-code-website_test1.html">&larr; Back to Interview Prep</a>
+<h1>Job Intelligence</h1>
+<p><strong>Last updated:</strong> 2026-05-16 12:28 UTC | <strong>Jobs analyzed:</strong> 23</p>
+<hr>
+
+<h2 id="coverage-dashboard">Coverage Dashboard</h2>
+<div class="info-crd">
+  <div class="stat"><span class="stat-val" style="color:var(--red)">21%</span><span class="stat-lbl">Overall Interview Prep Coverage</span></div>
+  <div class="stat"><span class="stat-val">19</span><span class="stat-lbl">Skills Covered</span></div>
+  <div class="stat"><span class="stat-val">91</span><span class="stat-lbl">Skills Tracked</span></div>
+  <div class="stat"><span class="stat-val">23</span><span class="stat-lbl">Active Job Listings</span></div>
+</div>
+
+<h3>Coverage by Skill Category</h3>
+<table>
+<tr><th>Category</th><th>Coverage</th><th>Bar</th></tr>
+<tr><td><strong>Architecture & System Design</strong></td><td>1/19 (5%)</td><td><div class="bar-bg"><div class="bar-fill" style="width:5%;background:var(--red)"></div></div></td></tr>
+<tr><td><strong>Cloud & Infrastructure</strong></td><td>4/21 (19%)</td><td><div class="bar-bg"><div class="bar-fill" style="width:19%;background:var(--red)"></div></div></td></tr>
+<tr><td><strong>AI & ML Engineering</strong></td><td>2/20 (10%)</td><td><div class="bar-bg"><div class="bar-fill" style="width:10%;background:var(--red)"></div></div></td></tr>
+<tr><td><strong>Programming & Databases</strong></td><td>3/18 (17%)</td><td><div class="bar-bg"><div class="bar-fill" style="width:17%;background:var(--red)"></div></div></td></tr>
+<tr><td><strong>Leadership & Process</strong></td><td>2/13 (15%)</td><td><div class="bar-bg"><div class="bar-fill" style="width:15%;background:var(--red)"></div></div></td></tr>
+</table>
+
+<h3>Coverage by Role</h3>
+<table>
+<tr><th>Role</th><th>Jobs</th><th>Skills Matched</th><th>Bar</th><th>Top Matched Skills</th></tr>
+<tr><td>AI Architect</td><td>13</td><td>12/91</td><td><div class="bar-bg"><div class="bar-fill" style="width:13%;background:var(--red)"></div></div></td><td style="font-size:12px;color:var(--text2)">Azure, machine learning, python, LLM, GCP</td></tr>
+<tr><td>DevOps Architect</td><td>2</td><td>6/91</td><td><div class="bar-bg"><div class="bar-fill" style="width:7%;background:var(--red)"></div></div></td><td style="font-size:12px;color:var(--text2)">Azure, ansible, CI/CD, java, microservices</td></tr>
+<tr><td>Cloud Architect</td><td>4</td><td>10/91</td><td><div class="bar-bg"><div class="bar-fill" style="width:11%;background:var(--red)"></div></div></td><td style="font-size:12px;color:var(--text2)">GCP, Azure, kubernetes, AWS, terraform</td></tr>
+<tr><td>Senior Engineering Manager</td><td>4</td><td>1/91</td><td><div class="bar-bg"><div class="bar-fill" style="width:1%;background:var(--red)"></div></div></td><td style="font-size:12px;color:var(--text2)">engineering manager</td></tr>
+</table>
+
+<h2 id="skill-details">Skill Details</h2>
+<p>Click each category to expand and see which skills are covered vs missing.</p>
+
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Architecture & System Design</strong>
+    <span class="coll-stat">1/19 &mdash; <span style="color:var(--red)">5%</span></span>
+  </div>
+  <div class="coll-body"><table class="skill-detail"><tr><td style='width:30px;text-align:center'>&#9989;</td><td>microservices</td><td style='color:var(--text3);font-size:12px'> (appears in 4 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>event-driven</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>distributed systems</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>system design</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>architecture patterns</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>CQRS</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>event sourcing</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>REST</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>gRPC</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>message queue</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>Kafka</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>RabbitMQ</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>load balancing</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>caching</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>CDN</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>API gateway</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>circuit breaker</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>consensus</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>CAP theorem</td><td style='color:var(--text3);font-size:12px'></td></tr>
+</table></div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Cloud & Infrastructure</strong>
+    <span class="coll-stat">4/21 &mdash; <span style="color:var(--red)">19%</span></span>
+  </div>
+  <div class="coll-body"><table class="skill-detail"><tr><td style='width:30px;text-align:center'>&#10060;</td><td>AWS</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>Azure</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>GCP</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>kubernetes</td><td style='color:var(--text3);font-size:12px'> (appears in 2 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>docker</td><td style='color:var(--text3);font-size:12px'> (appears in 1 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>terraform</td><td style='color:var(--text3);font-size:12px'> (appears in 2 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>ansible</td><td style='color:var(--text3);font-size:12px'> (appears in 1 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>CI/CD</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>jenkins</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>github actions</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>gitlab ci</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>argocd</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>prometheus</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>grafana</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>elk</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>datadog</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>opentelemetry</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>serverless</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>lambda</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>EC2</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>S3</td><td style='color:var(--text3);font-size:12px'></td></tr>
+</table></div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>AI & ML Engineering</strong>
+    <span class="coll-stat">2/20 &mdash; <span style="color:var(--red)">10%</span></span>
+  </div>
+  <div class="coll-body"><table class="skill-detail"><tr><td style='width:30px;text-align:center'>&#9989;</td><td>machine learning</td><td style='color:var(--text3);font-size:12px'> (appears in 6 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>deep learning</td><td style='color:var(--text3);font-size:12px'> (appears in 2 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>NLP</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>LLM</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>large language model</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>AI agents</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>MCP</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>model context protocol</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>langchain</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>langgraph</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>crewai</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>autogpt</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>RAG</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>retrieval augmented generation</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>fine-tuning</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>prompt engineering</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>vector database</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>embedding</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>transformer</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>attention mechanism</td><td style='color:var(--text3);font-size:12px'></td></tr>
+</table></div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Programming & Databases</strong>
+    <span class="coll-stat">3/18 &mdash; <span style="color:var(--red)">17%</span></span>
+  </div>
+  <div class="coll-body"><table class="skill-detail"><tr><td style='width:30px;text-align:center'>&#9989;</td><td>python</td><td style='color:var(--text3);font-size:12px'> (appears in 5 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>go</td><td style='color:var(--text3);font-size:12px'> (appears in 2 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>golang</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>java</td><td style='color:var(--text3);font-size:12px'> (appears in 4 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>typescript</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>rust</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>react</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>node.js</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>fastapi</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>django</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>postgresql</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>postgres</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>redis</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>mongodb</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>cassandra</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>SQL</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>NoSQL</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>database design</td><td style='color:var(--text3);font-size:12px'></td></tr>
+</table></div>
+</div>
+<div class="collapsible">
+  <div class="coll-header" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+    <span class="coll-arrow">&#9654;</span>
+    <strong>Leadership & Process</strong>
+    <span class="coll-stat">2/13 &mdash; <span style="color:var(--red)">15%</span></span>
+  </div>
+  <div class="coll-body"><table class="skill-detail"><tr><td style='width:30px;text-align:center'>&#10060;</td><td>agile</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>scrum</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>team leadership</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>tech lead</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>stakeholder management</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>roadmap</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>hiring</td><td style='color:var(--text3);font-size:12px'> (appears in 1 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>code review</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#9989;</td><td>engineering manager</td><td style='color:var(--text3);font-size:12px'> (appears in 1 jobs)</td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>technical strategy</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>mentoring</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>incident management</td><td style='color:var(--text3);font-size:12px'></td></tr>
+<tr><td style='width:30px;text-align:center'>&#10060;</td><td>on-call</td><td style='color:var(--text3);font-size:12px'></td></tr>
+</table></div>
+</div>
+
+<h2 id="job-openings">Job Openings</h2>
+<table>
+<tr><th>Title</th><th>Company</th><th>Location</th><th>Skills Found</th></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-trueledge-hr-and-accounting-services-pune-chennai-bengaluru-10-to-15-years-150526503097" target="_blank" rel="noopener">AI Architect</a></td><td>Trueledge Hr And Accounting Services</td><td>Pune, Chennai, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">GCP</span> <span class="skill-badge">Machine Learning</span> <span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-onix-pune-10-to-15-years-140526505049" target="_blank" rel="noopener">AI Architect</a></td><td>Onix Networking Corporation</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">Python</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-ncs-pte-ltd-pune-3-to-7-years-140526504121" target="_blank" rel="noopener">AI Architect</a></td><td>NCS Group</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Python</span> <span class="skill-badge">Go</span> <span class="skill-badge">Machine Learning</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-artificial-intelligence-ai-architect-gspann-hyderabad-pune-gurugram-12-to-20-years-140526016301" target="_blank" rel="noopener">Artificial Intelligence (AI) Architect</a></td><td>GSPANN</td><td>Hyderabad, Pune, Gurugram</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">AWS</span> <span class="skill-badge">Java</span> <span class="skill-badge">AI agents</span> <span class="skill-badge">Microservices</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-naukri-expert-assist-pune-chennai-bengaluru-7-to-11-years-140526034749" target="_blank" rel="noopener">AI Architect</a></td><td>Naukri Expert Assist</td><td>Pune, Chennai, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Python</span> <span class="skill-badge">LLM</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-zensar-technologies-pune-12-to-17-years-130526503925" target="_blank" rel="noopener">AI Architect</a></td><td>Zensar</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Go</span> <span class="skill-badge">Deep Learning</span> <span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-gen-ai-architect-gyansys-infotech-hyderabad-pune-bengaluru-10-to-20-years-130526016281" target="_blank" rel="noopener">Gen AI Architect</a></td><td>Gyansys Infotech</td><td>Hybrid - Hyderabad, Pune, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">LLM</span> <span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-hiring-ai-architect-for-bangalore-pune-arrow-electronics-pune-bengaluru-9-to-14-years-110526030144" target="_blank" rel="noopener">Hiring AI Architect For Bangalore / Pune</a></td><td>Arrow Electronics</td><td>Hybrid - Pune, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">Python</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-agentic-ai-architect-zycus-infotech-mumbai-pune-bengaluru-6-to-11-years-150426017127" target="_blank" rel="noopener">Agentic AI Architect</a></td><td>Zycus Infotech</td><td>Hybrid - Mumbai, Pune, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">AWS</span> <span class="skill-badge">Azure</span> <span class="skill-badge">GCP</span> <span class="skill-badge">Java</span> <span class="skill-badge">Microservices</span> <span class="skill-badge">MLOps</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-arrow-electronics-pune-bengaluru-10-to-16-years-050526007258" target="_blank" rel="noopener">AI Architect</a></td><td>Arrow Electronics</td><td>Pune, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">Python</span> <span class="skill-badge">Machine Learning</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-agentic-gen-ai-architect-capgemini-technology-services-india-limited-pune-6-to-9-years-040526916264" target="_blank" rel="noopener">Agentic/Gen AI Architect</a></td><td>Capgemini</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">Machine Learning</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-agentic-ai-architect-datametica-pune-8-to-14-years-040526005192" target="_blank" rel="noopener">Agentic Ai Architect</a></td><td>Datametica</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Machine Learning</span> <span class="skill-badge">Deep Learning</span> <span class="skill-badge">LLM</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-ai-architect-doublu-kolkata-pune-chennai-10-to-15-years-060526023528" target="_blank" rel="noopener">Ai Architect</a></td><td>Doublu India Private Limited</td><td>Kolkata, Pune, Chennai</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-devops-lead-engineer-architect-persistent-systems-limited-pune-12-to-17-years-161024016619" target="_blank" rel="noopener">DevOps Lead Engineer/Architect</a></td><td>Persistent</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">Ansible</span> <span class="skill-badge">CI/CD</span> <span class="skill-badge">Java</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-devops-architect-accenture-solutions-pvt-ltd-pune-15-to-20-years-110526915573" target="_blank" rel="noopener">DevOps Architect</a></td><td>Accenture</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Machine Learning</span> <span class="skill-badge">Microservices</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-gcp-cloud-architect-wipro-pune-chennai-bengaluru-10-to-15-years-110526003342" target="_blank" rel="noopener">GCP Cloud Architect</a></td><td>Wipro</td><td>Hybrid - Pune, Chennai, Bengaluru</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">GCP</span> <span class="skill-badge">Java</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-cloud-architect-gcp-malomatia-pune-14-to-18-years-050526031569" target="_blank" rel="noopener">Cloud Architect(GCP)</a></td><td>Malomatia</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">Azure</span> <span class="skill-badge">GCP</span> <span class="skill-badge">Kubernetes</span> <span class="skill-badge">Docker</span> <span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-cloud-architect-digital-convergence-technologies-pune-10-to-20-years-120526037039" target="_blank" rel="noopener">Cloud Architect</a></td><td>Digital Convergence Technologies</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">AWS</span> <span class="skill-badge">Azure</span> <span class="skill-badge">GCP</span> <span class="skill-badge">Kubernetes</span> <span class="skill-badge">Terraform</span> <span class="skill-badge">Microservices</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-cloud-architect-zymr-systems-pune-ahmedabad-10-to-15-years-150526009484" target="_blank" rel="noopener">Cloud Architect</a></td><td>Zymr Systems</td><td>Pune, Ahmedabad</td><td style='max-width:200px'><div class='skill-wrap'><span class="skill-badge">AWS</span> <span class="skill-badge">Azure</span> <span class="skill-badge">GCP</span> <span class="skill-badge">Terraform</span> <span class="skill-badge">CI/CD</span> <span class="skill-badge">Architecture</span></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-sr-manager-engineering-change-management-tatamotors-campus-hiring-pune-3-to-6-years-111223500781" target="_blank" rel="noopener">Sr. Manager Engineering Change Management</a></td><td>TataMotors Campus Hiring</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-senior-engineering-manager-mr-r-d-philips-india-limited-pune-15-to-20-years-050526502889" target="_blank" rel="noopener">Senior Engineering Manager MR R&D</a></td><td>Philips</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-sr-manager-engineering-change-management-tatamotors-campus-hiring-pune-3-to-6-years-301123501028" target="_blank" rel="noopener">Sr. Manager Engineering Change Management</a></td><td>TataMotors Campus Hiring</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'></div></td></tr>
+<tr><td><a href="https://www.naukri.com/job-listings-senior-manager-product-engineering-hsbc-electronic-data-processing-india-pvt-ltd-pune-5-to-9-years-191125506401" target="_blank" rel="noopener">Senior Manager Product Engineering</a></td><td>Hsbc</td><td>Pune</td><td style='max-width:200px'><div class='skill-wrap'></div></td></tr>
+</table>
+
+<h2 id="companies-hiring">Companies Hiring</h2>
+<div class="company-grid"><div class="company-item"><strong>Arrow Electronics</strong> <span class="company-count">2 jobs</span></div><div class="company-item"><strong>TataMotors Campus Hiring</strong> <span class="company-count">2 jobs</span></div><div class="company-item"><strong>Trueledge Hr And Accounting Services</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Onix Networking Corporation</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>NCS Group</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>GSPANN</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Naukri Expert Assist</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Zensar</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Gyansys Infotech</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Zycus Infotech</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Capgemini</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Datametica</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Doublu India Private Limited</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Persistent</strong> <span class="company-count">1 job</span></div><div class="company-item"><strong>Accenture</strong> <span class="company-count">1 job</span></div></div>
+
+
+<style>
+.demand-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px}
+.demand-tab{display:inline-block;padding:6px 16px;font-size:12px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .12s;text-decoration:none}
+.demand-tab:hover{color:var(--text);border-color:var(--accent);background:rgba(108,140,255,0.08)}
+.demand-tab.dt-active{color:var(--accent);border-color:var(--accent);background:rgba(108,140,255,0.12);font-weight:600}
+.demand-tab-content{display:none}
+.demand-tab-content.dt-active{display:block}
+.demand-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.demand-high{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2)}
+.demand-med{background:rgba(108,140,255,0.12);color:#6c8cff;border:1px solid rgba(108,140,255,0.2)}
+.demand-low{background:rgba(232,121,249,0.12);color:#e879f9;border:1px solid rgba(232,121,249,0.2)}
+</style>
+
+
+<style>
+.demand-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px}
+.demand-tab{display:inline-block;padding:6px 16px;font-size:12px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .12s;text-decoration:none}
+.demand-tab:hover{color:var(--text);border-color:var(--accent);background:rgba(108,140,255,0.08)}
+.demand-tab.dt-active{color:var(--accent);border-color:var(--accent);background:rgba(108,140,255,0.12);font-weight:600}
+.demand-tab-content{display:none}
+.demand-tab-content.dt-active{display:block}
+.demand-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.demand-high{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2)}
+.demand-med{background:rgba(108,140,255,0.12);color:#6c8cff;border:1px solid rgba(108,140,255,0.2)}
+.demand-low{background:rgba(232,121,249,0.12);color:#e879f9;border:1px solid rgba(232,121,249,0.2)}
+</style>
+
+
+<style>
+.demand-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 20px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px}
+.demand-tab{display:inline-block;padding:6px 16px;font-size:12px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .12s;text-decoration:none}
+.demand-tab:hover{color:var(--text);border-color:var(--accent);background:rgba(108,140,255,0.08)}
+.demand-tab.dt-active{color:var(--accent);border-color:var(--accent);background:rgba(108,140,255,0.12);font-weight:600}
+.demand-tab-content{display:none}
+.demand-tab-content.dt-active{display:block}
+.demand-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.demand-high{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2)}
+.demand-med{background:rgba(108,140,255,0.12);color:#6c8cff;border:1px solid rgba(108,140,255,0.2)}
+.demand-low{background:rgba(232,121,249,0.12);color:#e879f9;border:1px solid rgba(232,121,249,0.2)}
+</style>
+
+<h2 id="skill-demand" style="margin-top:44px">Skill Demand Heatmap</h2>
+<p>Skills ranked by number of companies demanding them from <strong>LinkedIn job listings</strong>. Last refreshed: 2026-05-18 06:06 UTC. <strong>30</strong> distinct skills across <strong>155</strong> listings from <strong>91</strong> companies.</p>
+
+<div class="info-crd" style="margin:12px 0 20px">
+  <div class="stat"><span class="stat-val" style="color:var(--green)">1</span><span class="stat-lbl">High Demand</span></div>
+  <div class="stat"><span class="stat-val" style="color:var(--accent)">0</span><span class="stat-lbl">Medium Demand</span></div>
+  <div class="stat"><span class="stat-val" style="color:#e879f9">29</span><span class="stat-lbl">Low Demand</span></div>
+  <div class="stat"><span class="stat-val" style="color:var(--cyan)">155</span><span class="stat-lbl">Jobs Analyzed</span></div>
+</div>
+
+<div class="demand-tabs">
+<a href="#" class="demand-tab dt-active" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-all').classList.add('dt-active')">All Skills</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-cloud-infra').classList.add('dt-active')">Cloud & Infra</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-architecture').classList.add('dt-active')">Architecture</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-ai-ml').classList.add('dt-active')">AI & ML</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-programming').classList.add('dt-active')">Programming</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-devops-sre').classList.add('dt-active')">DevOps & SRE</a>
+<a href="#" class="demand-tab" onclick="event.preventDefault();document.querySelectorAll('.demand-tab').forEach(t=>t.classList.remove('dt-active'));this.classList.add('dt-active');document.querySelectorAll('.demand-tab-content').forEach(c=>c.classList.remove('dt-active'));document.getElementById('dt-leadership').classList.add('dt-active')">Leadership</a>
+</div>
+<div class="demand-tab-content dt-active" id="dt-all"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>AWS</strong></td><td>19/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:100%;background:#22c55e'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>Azure</strong></td><td>6/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:32%;background:#e879f9'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>go</strong></td><td>6/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:32%;background:#e879f9'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>java</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>Google Cloud</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>EKS</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>GCP</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>RAG</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>generative AI</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>SLO</strong></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>lambda</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>kafka</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>VPC</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>S3</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>RDS</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>EC2</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>IAM</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>CI/CD</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>github actions</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>argocd</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>REST</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>kubernetes</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>SQL</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>GenAI</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>multi-cloud</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>pre-sales</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>SRE</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>DevSecOps</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>spring boot</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+<tr><td><strong>machine learning</strong></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:12px;color:var(--text2);max-width:280px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-cloud-infra"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>AWS</strong></td><td><span class="demand-badge demand-high">High</span></td><td>19/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:100%;background:#22c55e'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>Azure</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>6/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:32%;background:#e879f9'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>GCP</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>Google Cloud</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>kubernetes</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>CI/CD</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>EKS</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>VPC</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>IAM</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>lambda</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>argocd</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-architecture"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>kafka</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>REST</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>multi-cloud</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-ai-ml"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>machine learning</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>GenAI</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>RAG</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-programming"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>java</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>2/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:11%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>go</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>6/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:32%;background:#e879f9'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>SQL</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>spring boot</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-devops-sre"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>SRE</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+<tr><td><strong>DevSecOps</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+<div class="demand-tab-content" id="dt-leadership"><table><tr><th>Skill</th><th>Level</th><th>Demand</th><th>Bar</th><th>Companies</th></tr>
+<tr><td><strong>pre-sales</strong></td><td><span class="demand-badge demand-low">Low</span></td><td>1/91</td><td><div class='bar-bg'><div class='bar-fill' style='width:5%;background:#ef4444'></div></div></td><td style='font-size:11px;color:var(--text3);max-width:200px'></td></tr>
+</table></div>
+
+
+<h2 id="skill-gaps">Skill Gaps &amp; Missing Coverage</h2>
+<p>These skills appear in job descriptions but are <strong>not yet covered</strong> in your interview prep content. Click to search for resources.</p>
+<p style='margin:8px 0 4px;font-size:13px;color:var(--text3)'>Architecture & System Design:</p><div class='gap-row'><a href="https://www.google.com/search?q=interview+prep+api+gateway" target="_blank" rel="noopener"><span class="skill-chip red">api gateway</span></a> <a href="https://www.google.com/search?q=interview+prep+architecture+patterns" target="_blank" rel="noopener"><span class="skill-chip red">architecture patterns</span></a> <a href="https://www.google.com/search?q=interview+prep+caching" target="_blank" rel="noopener"><span class="skill-chip red">caching</span></a> <a href="https://www.google.com/search?q=interview+prep+cap+theorem" target="_blank" rel="noopener"><span class="skill-chip red">cap theorem</span></a> <a href="https://www.google.com/search?q=interview+prep+cdn" target="_blank" rel="noopener"><span class="skill-chip red">cdn</span></a> <a href="https://www.google.com/search?q=interview+prep+circuit+breaker" target="_blank" rel="noopener"><span class="skill-chip red">circuit breaker</span></a> </div><p style='margin:8px 0 4px;font-size:13px;color:var(--text3)'>Cloud & Infrastructure:</p><div class='gap-row'><a href="https://www.google.com/search?q=interview+prep+argocd" target="_blank" rel="noopener"><span class="skill-chip red">argocd</span></a> <a href="https://www.google.com/search?q=interview+prep+aws" target="_blank" rel="noopener"><span class="skill-chip red">aws</span></a> <a href="https://www.google.com/search?q=interview+prep+azure" target="_blank" rel="noopener"><span class="skill-chip red">azure</span></a> <a href="https://www.google.com/search?q=interview+prep+ci/cd" target="_blank" rel="noopener"><span class="skill-chip red">ci/cd</span></a> </div><p style='margin:8px 0 4px;font-size:13px;color:var(--text3)'>AI & ML Engineering:</p><div class='gap-row'><a href="https://www.google.com/search?q=interview+prep+ai+agents" target="_blank" rel="noopener"><span class="skill-chip red">ai agents</span></a> <a href="https://www.google.com/search?q=interview+prep+attention+mechanism" target="_blank" rel="noopener"><span class="skill-chip red">attention mechanism</span></a> <a href="https://www.google.com/search?q=interview+prep+autogpt" target="_blank" rel="noopener"><span class="skill-chip red">autogpt</span></a> </div><p style='margin:8px 0 4px;font-size:13px;color:var(--text3)'>Programming & Databases:</p><div class='gap-row'><a href="https://www.google.com/search?q=interview+prep+cassandra" target="_blank" rel="noop<h2 id="references">References &amp; Deep Dives</h2>
+<p>Curated interview prep resources for skill gaps identified in today's job listings.</p>
+<div class="ref-group">
+<h3 style="font-size:14px;margin:12px 0 4px">agile</h3>
+<p style="font-size:12px;color:var(--text3);margin:2px 0 6px">Top 50 Agile Interview Questions & Answers 2026</p>
+<a href="https://github.com/Devinterview-io/agile-and-scrum-interview-questions" target="_blank" rel="noopener" class="ref-link ref-gh">&#128196; GitHub: agile</a><br>
+<a href="https://intellipaat.com/blog/interview-question/agile-interview-questions/" target="_blank" rel="noopener" class="ref-link ref-art">&#128214; Article: agile</a><br>
+</div>
+<div class="ref-group">
+<h3 style="font-size:14px;margin:12px 0 4px">ai agents</h3>
+<p style="font-size:12px;color:var(--text3);margin:2px 0 6px">Production-Ready AI Agents Architecture Deep Dive</p>
+<a href="https://www.youtube.com/watch?v=5b5tqrqc5J8" target="_blank" rel="noopener" class="ref-link ref-yt">&#9654; YouTube: ai agents</a><br>
+<a href="https://github.com/girijesh-ai/ai-interview-codex" target="_blank" rel="noopener" class="ref-link ref-gh">&#128196; GitHub: ai agents</a><br>
+<a href="https://atul4u.medium.com/the-complete-agentic-ai-system-design-interview-guide-2026-f95d0cfeb7cf" target="_blank" rel="noopener" class="ref-link ref-art">&#128214; Article: ai agents</a><br>
+</div>
+<div class="ref-group">
+<h3 style="font-size:14px;margin:12px 0 4px">api gateway</h3>
+<p style="font-size:12px;color:var(--text3);margin:2px 0 6px">System Design: How to Architect an API Gateway</p>
+<a href="https://github.com/Devinterview-io/api-design-interview-questions" target="_blank" rel="noopener" class="ref-link ref-gh">&#128196; GitHub: api gateway</a><br>
+<a href="https://designgurus.substack.com/p/complete-api-gateway-guide-for-system" target="_blank" rel="noopener" class="ref-link ref-art">&#128214; Article: api gateway</a><br>
+</div>
+<div class="ref-group">
+<h3 style="font-size:14px;margin:12px 0 4px">architecture patterns</h3>
+<p style="font-size:12px;color:var(--text3);margin:2px 0 6px">5 Architecture Patterns for System Design Interviews</p>
+<a href="https://www.youtube.com/watch?v=q9TiOP1CVx8" target="_blank" rel="noopener" class="ref-link ref-yt">&#9654; YouTube: architecture patterns</a><br>
+<a href="https://www.wecreateproblems.com/interview-questions/system-design-interview-questions" target="_blank" rel="noopener" class="ref-link ref-art">&#128214; Article: architecture patterns</a><br>
+</div>
+<div class="ref-group">
+<h3 style="font-size:14px;margin:12px 0 4px">argocd</h3>
+<p style="font-size:12px;color:var(--text3);margin:2px 0 6px">ArgoCD and GitOps for Kubernetes Deployments</p>
+<a href="https://www.youtube.com/watch?v=ZHBSxbw0ee8" target="_blank" rel="noopener" class="ref-link ref-yt">&#9654; YouTube: argocd</a><br>
+<a href="https://github.com/kapilbtech/argocd-in-one-shot" target="_blank" rel="noopener" class="ref-link ref-gh">&#128196; GitHub: argocd</a><br>
+<a href="https://stackinsight.substack.com/p/argocd-questions-you-must-know" target="_blank" rel="noopener" class="ref-link ref-art">&#128214; Article: argocd</a><br>
+</div>
+
+ener"><span class="skill-chip red">cassandra</span></a> </div><p style='margin:8px 0 4px;font-size:13px;color:var(--text3)'>Leadership & Process:</p><div class='gap-row'><a href="https://www.google.com/search?q=interview+prep+agile" target="_blank" rel="noopener"><span class="skill-chip red">agile</span></a> </div>
+</div>
+</body>
+</html>
