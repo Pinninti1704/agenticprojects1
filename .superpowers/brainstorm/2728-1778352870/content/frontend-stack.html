@@ -1,0 +1,33 @@
+<h2>Which frontend stack?</h2>
+<p class="subtitle">You mentioned "frontend plugins" — what's your preference?</p>
+
+<div class="options">
+  <div class="option" data-choice="react-tailwind" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>React + Vite + Tailwind CSS</h3>
+      <p>Modern, component-based. Tailwind for utility-first styling. Recharts for charts. Lucide for icons. Same stack as the trading dashboard, so you already have it installed. No backend needed — pure static SPA with localStorage.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="react-shadcn" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>React + Vite + shadcn/ui</h3>
+      <p>Beautiful, accessible component library built on Radix UI + Tailwind. Professional look out of the box. Slightly heavier setup but gives you polished tables, dialogs, forms, and charts with minimal custom CSS.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="react-mui" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>React + Vite + MUI (Material UI)</h3>
+      <p>Full component library with Google Material Design. Lots of built-in components (data grids, autocompletes, steppers). Heavier bundle but feature-rich. Well-suited for data-heavy dashboards.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="vanilla" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>Vanilla HTML/CSS/JS</h3>
+      <p>No framework, no build step. Keep it lean. All styling custom. Maximum control, minimum dependencies. Good for a focused single-page tool with no complex state management needs.</p>
+    </div>
+  </div>
+</div>

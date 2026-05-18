@@ -4,6 +4,17 @@ import { DEFAULT_CATEGORIES } from '@/lib/constants'
 import { generateId, nowISO } from '@/lib/utils'
 import { loadFromStorage, saveToStorage } from '@/services/storage'
 
+function topicsEqual(a: Topic[], b: Topic[]): boolean {
+  if (a.length !== b.length) return false
+  return a.every((t, i) => {
+    const o = b[i]
+    return t.id === o.id && t.confidence === o.confidence && t.name === o.name
+      && t.categoryId === o.categoryId && t.deadlineId === o.deadlineId
+      && t.materials.length === o.materials.length
+      && t.acceptedQuestionIds.length === o.acceptedQuestionIds.length
+  })
+}
+
 interface TopicState {
   topics: Topic[]
   categories: TopicCategory[]
@@ -46,9 +57,9 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
       updatedAt: nowISO(),
     }
     set((s) => {
-      const next = { topics: [...s.topics, topic] }
-      saveToStorage(STORAGE_KEY, { ...s, ...next })
-      return next
+      const topics = [...s.topics, topic]
+      saveToStorage(STORAGE_KEY, { ...s, topics })
+      return { topics }
     })
     return topic
   },
@@ -58,6 +69,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
       const topics = s.topics.map((t) =>
         t.id === id ? { ...t, ...updates, updatedAt: nowISO() } : t
       )
+      if (topicsEqual(s.topics, topics)) return {}
       saveToStorage(STORAGE_KEY, { ...s, topics })
       return { topics }
     })
@@ -66,6 +78,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
   deleteTopic: (id) => {
     set((s) => {
       const topics = s.topics.filter((t) => t.id !== id)
+      if (topicsEqual(s.topics, topics)) return {}
       const selectedTopicId = s.selectedTopicId === id ? null : s.selectedTopicId
       saveToStorage(STORAGE_KEY, { ...s, topics, selectedTopicId })
       return { topics, selectedTopicId }
@@ -77,6 +90,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
       const topics = s.topics.map((t) =>
         t.id === id ? { ...t, confidence, updatedAt: nowISO() } : t
       )
+      if (topicsEqual(s.topics, topics)) return {}
       saveToStorage(STORAGE_KEY, { ...s, topics })
       return { topics }
     })
@@ -84,9 +98,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
 
   addMaterial: (topicId, material) => {
     const newMaterial: StudyMaterial = {
-      ...material,
-      id: generateId(),
-      createdAt: nowISO(),
+      ...material, id: generateId(), createdAt: nowISO(),
     }
     set((s) => {
       const topics = s.topics.map((t) =>
@@ -94,6 +106,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
           ? { ...t, materials: [...t.materials, newMaterial], updatedAt: nowISO() }
           : t
       )
+      if (topicsEqual(s.topics, topics)) return {}
       saveToStorage(STORAGE_KEY, { ...s, topics })
       return { topics }
     })
@@ -106,6 +119,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
           ? { ...t, materials: t.materials.filter((m) => m.id !== materialId), updatedAt: nowISO() }
           : t
       )
+      if (topicsEqual(s.topics, topics)) return {}
       saveToStorage(STORAGE_KEY, { ...s, topics })
       return { topics }
     })
@@ -113,6 +127,7 @@ export const useTopicStore = create<TopicState & TopicActions>((set, get) => ({
 
   setSelectedTopicId: (id) => {
     set((s) => {
+      if (s.selectedTopicId === id) return {}
       saveToStorage(STORAGE_KEY, { ...s, selectedTopicId: id })
       return { selectedTopicId: id }
     })

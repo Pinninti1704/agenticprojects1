@@ -1,0 +1,26 @@
+<h2>How do you want to organize interview topics?</h2>
+<p class="subtitle">This is the core of the app — tracking preparedness across topics</p>
+
+<div class="options">
+  <div class="option" data-choice="flat" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Flat Topic List</h3>
+      <p>Simple list of topics with a preparedness score (0-100%). Add topics freely. Sort by name, score, or last studied. Quick to manage — no hierarchy. Good for broad, varied interview prep.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="grouped" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Grouped by Category</h3>
+      <p>Topics organized into categories like "Data Structures", "System Design", "Behavioral", "Domain Knowledge". Each category collapses/expands. Gives structure without being a deep tree. Best for most users.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="nested" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Nested Hierarchy</h3>
+      <p>Unlimited nesting: Category → Sub-topic → Sub-sub-topic. Each level can have its own preparedness score, rolled up to the parent. Most flexible but most complex. Overkill unless you have very deep subjects.</p>
+    </div>
+  </div>
+</div>

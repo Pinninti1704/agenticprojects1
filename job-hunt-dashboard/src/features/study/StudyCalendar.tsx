@@ -1,6 +1,6 @@
 import { useStudyStore } from '@/stores/studyStore'
 
-export function StudyCalendar() {
+export function StudyCalendar({ onDayClick }: { onDayClick?: (dateStr: string) => void }) {
   const sessions = useStudyStore((s) => s.sessions)
 
   const today = new Date()
@@ -38,7 +38,8 @@ export function StudyCalendar() {
           return (
             <div
               key={day}
-              className={`aspect-square rounded flex items-center justify-center text-[11px] ${getIntensity(day)} ${isToday ? 'ring-1 ring-primary' : ''}`}
+              onClick={() => onDayClick?.(`${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`)}
+              className={`aspect-square rounded flex items-center justify-center text-[11px] cursor-pointer hover:ring-1 hover:ring-primary/50 transition-all ${getIntensity(day)} ${isToday ? 'ring-1 ring-primary' : ''}`}
             >
               <span className={isToday ? 'text-white font-bold' : 'text-text-muted'}>{day}</span>
             </div>

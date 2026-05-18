@@ -1,0 +1,156 @@
+.portfolio-summary-container {
+  margin-bottom: 0;
+}
+
+.portfolio-summary-container h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4a90d9, #00d4ff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(74, 144, 217, 0.3);
+}
+
+.summary-card:hover::before {
+  opacity: 1;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  color: #6c7a89;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.card-value.positive {
+  color: #2ecc71;
+}
+
+.card-value.negative {
+  color: #e74c3c;
+}
+
+.large-success {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(39, 174, 96, 0.08));
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.large-success::before {
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+}
+
+.large-success .card-title {
+  font-size: 1rem;
+  color: #2ecc71;
+}
+
+.large-success .card-value {
+  font-size: 2.5rem;
+  color: #2ecc71;
+}
+
+.large-success .percentage {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  color: #2ecc71;
+  margin-top: 5px;
+}
+
+.large-failure {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(192, 57, 43, 0.08));
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.large-failure::before {
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+.large-failure .card-title {
+  font-size: 1rem;
+  color: #e74c3c;
+}
+
+.large-failure .card-value {
+  font-size: 2.5rem;
+  color: #e74c3c;
+}
+
+.large-failure .percentage {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  color: #e74c3c;
+  margin-top: 5px;
+}
+
+@media (max-width: 1024px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .large-success,
+  .large-failure {
+    grid-column: span 1;
+  }
+  
+  .card-value {
+    font-size: 1.4rem;
+  }
+  
+  .large-success .card-value,
+  .large-failure .card-value {
+    font-size: 1.8rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Plus, Star, Trash2 } from 'lucide-react'
 import { useTopicStore } from '@/stores/topicStore'
 import { Button } from '@/components/ui/Button'
@@ -15,13 +15,14 @@ import { Modal } from '@/components/ui/Modal'
 
 export function TopicDetail() {
   const selectedTopicId = useTopicStore((s) => s.selectedTopicId)
-  const topic = useTopicStore((s) => s.topics.find((t) => t.id === s.selectedTopicId))
+  const topics = useTopicStore((s) => s.topics)
+  const deadlines = useDeadlineStore((s) => s.deadlines)
   const updateConfidence = useTopicStore((s) => s.updateConfidence)
   const addMaterial = useTopicStore((s) => s.addMaterial)
   const removeMaterial = useTopicStore((s) => s.removeMaterial)
 
-  const deadline = useDeadlineStore((s) => s.deadlines.find((d) => d.topicId === selectedTopicId))
-  const setDeadline = useDeadlineStore((s) => s.setDeadline)
+  const topic = useMemo(() => topics.find((t) => t.id === selectedTopicId), [topics, selectedTopicId])
+  const deadline = useMemo(() => deadlines.find((d) => d.topicId === selectedTopicId), [deadlines, selectedTopicId])
 
   const [showMaterialForm, setShowMaterialForm] = useState(false)
   const [materialTitle, setMaterialTitle] = useState('')
@@ -61,7 +62,7 @@ export function TopicDetail() {
 
   const handleSetDeadline = () => {
     if (!deadlineDate) return
-    setDeadline(topic.id, deadlineDate)
+    useDeadlineStore.getState().setDeadline(topic.id, deadlineDate)
     setShowDatePicker(false)
   }
 

@@ -1,24 +1,41 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useApplicationStore } from '@/stores/applicationStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { ApplicationCard } from './ApplicationCard'
 import { APPLICATION_STAGES, STAGE_LABELS, STAGE_COLORS } from '@/types/application'
+import { daysUntil } from '@/lib/utils'
 
-export function ApplicationList() {
+export function ApplicationList({ search = '' }: { search?: string }) {
   const applications = useApplicationStore((s) => s.applications)
   const updateStage = useApplicationStore((s) => s.updateStage)
   const deleteApplication = useApplicationStore((s) => s.deleteApplication)
+  const showTerminalStages = useSettingsStore((s) => s.applications.showTerminalStages)
+  const followUpDays = useSettingsStore((s) => s.app.followUpDays)
   const [selectedApp, setSelectedApp] = useState<string | null>(null)
   const [showEditForm, setShowEditForm] = useState(false)
 
-  const activeStages = APPLICATION_STAGES.filter((s) => s !== 'rejected' && s !== 'withdrawn')
+  const activeStages = useMemo(() => {
+    if (showTerminalStages) return APPLICATION_STAGES
+    return APPLICATION_STAGES.filter((s) => s !== 'rejected' && s !== 'withdrawn')
+  }, [showTerminalStages])
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return applications
+    const q = search.toLowerCase()
+    return applications.filter((a) =>
+      a.company.toLowerCase().includes(q) ||
+      a.role.toLowerCase().includes(q) ||
+      a.notes.toLowerCase().includes(q)
+    )
+  }, [applications, search])
 
   return (
     <div>
       <div className="flex gap-4 overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin' }}>
         {activeStages.map((stage) => {
-          const stageApps = applications.filter((a) => a.stage === stage)
+          const stageApps = useMemo(() => filtered.filter((a) => a.stage === stage), [filtered, stage])
           return (
             <div key={stage} className="min-w-[220px] flex-shrink-0">
               <div className="flex items-center gap-2 mb-3">
@@ -32,6 +49,7 @@ export function ApplicationList() {
                     key={app.id}
                     application={app}
                     onClick={() => { setSelectedApp(app.id); setShowEditForm(true) }}
+                    staleDays={(() => { const d = Math.max(0, -daysUntil(app.updatedAt.slice(0, 10))); return d >= followUpDays ? d : undefined })()}
                   />
                 ))}
                 {stageApps.length === 0 && (

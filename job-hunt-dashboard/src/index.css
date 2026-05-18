@@ -7,11 +7,22 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
+}
+
+:root {
   --color-surface: #0f0d2e;
   --color-surface-2: #1e1b4b;
   --color-border: #312e81;
   --color-text: #f8fafc;
   --color-text-muted: #a5b4fc;
+}
+
+:root.light {
+  --color-surface: #f8fafc;
+  --color-surface-2: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
 }
 
 body {

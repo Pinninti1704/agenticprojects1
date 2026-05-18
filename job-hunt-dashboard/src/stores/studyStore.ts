@@ -20,6 +20,11 @@ interface StudyActions {
 
 const STORAGE_KEY = 'study'
 
+function sessionsEqual(a: StudySession[], b: StudySession[]): boolean {
+  if (a.length !== b.length) return false
+  return a.every((item, i) => item.id === b[i].id && item.durationMinutes === b[i].durationMinutes)
+}
+
 function computeStreak(datesStudied: string[]): StreakData {
   const sorted = [...new Set(datesStudied)].sort().reverse()
   if (sorted.length === 0) return { current: 0, longest: 0, datesStudied: [] }
@@ -65,11 +70,11 @@ export const useStudyStore = create<StudyState & StudyActions>((set, get) => ({
     }
     set((s) => {
       const sessions = [...s.sessions, session]
+      if (sessionsEqual(s.sessions, sessions)) return {}
       const datesStudied = [...new Set([...s.streak.datesStudied, session.date])]
       const streak = computeStreak(datesStudied)
-      const next = { sessions, streak }
-      saveToStorage(STORAGE_KEY, next)
-      return next
+      saveToStorage(STORAGE_KEY, { sessions, streak })
+      return { sessions, streak }
     })
   },
 

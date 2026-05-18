@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Check, X, ChevronDown, ChevronRight } from 'lucide-react'
 import { useQuestionStore } from '@/stores/questionStore'
+import { useDeadlineStore } from '@/stores/deadlineStore'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
+import { Input } from '@/components/ui/Input'
+import { Modal } from '@/components/ui/Modal'
 import { useToast } from '@/components/ui/Toast'
 
 interface QuestionReviewQueueProps {
@@ -16,19 +19,38 @@ const difficultyVariant = (d: string) => {
 }
 
 export function QuestionReviewQueue({ topicId }: QuestionReviewQueueProps) {
-  const questionSets = useQuestionStore((s) => s.questionSets.filter((qs) => qs.topicId === topicId && qs.status === 'pending_review'))
+  const allQuestionSets = useQuestionStore((s) => s.questionSets)
   const acceptQuestionSet = useQuestionStore((s) => s.acceptQuestionSet)
   const rejectQuestionSet = useQuestionStore((s) => s.rejectQuestionSet)
   const acceptSingleQuestion = useQuestionStore((s) => s.acceptSingleQuestion)
   const rejectSingleQuestion = useQuestionStore((s) => s.rejectSingleQuestion)
+  const setDeadline = useDeadlineStore((s) => s.setDeadline)
   const { addToast } = useToast()
   const [expandedSet, setExpandedSet] = useState<string | null>(null)
+  const [showDeadlinePicker, setShowDeadlinePicker] = useState(false)
+  const [pendingAcceptSetId, setPendingAcceptSetId] = useState<string | null>(null)
+  const [deadlineDate, setDeadlineDate] = useState('')
+
+  const questionSets = useMemo(() =>
+    allQuestionSets.filter((qs) => qs.topicId === topicId && qs.status === 'pending_review'),
+    [allQuestionSets, topicId]
+  )
 
   if (questionSets.length === 0) return null
 
   const handleAcceptAll = (setId: string) => {
     acceptQuestionSet(setId)
-    addToast('success', 'Questions accepted! Set a deadline to cover them.')
+    setPendingAcceptSetId(setId)
+    setShowDeadlinePicker(true)
+  }
+
+  const handleSetDeadline = () => {
+    if (!deadlineDate || !pendingAcceptSetId) return
+    setDeadline(topicId, deadlineDate)
+    setShowDeadlinePicker(false)
+    setDeadlineDate('')
+    setPendingAcceptSetId(null)
+    addToast('success', 'Questions accepted with deadline set!')
   }
 
   return (
@@ -86,6 +108,20 @@ export function QuestionReviewQueue({ topicId }: QuestionReviewQueueProps) {
           )}
         </div>
       ))}
+
+      <Modal open={showDeadlinePicker} onClose={() => setShowDeadlinePicker(false)} title="Set a Deadline">
+        <p className="text-sm text-text-muted mb-3">Set a deadline to cover these questions.</p>
+        <Input
+          label="Due Date"
+          type="date"
+          value={deadlineDate}
+          onChange={(e) => setDeadlineDate(e.target.value)}
+        />
+        <div className="flex justify-end gap-3 mt-4">
+          <Button variant="secondary" onClick={() => setShowDeadlinePicker(false)}>Skip</Button>
+          <Button onClick={handleSetDeadline} disabled={!deadlineDate}>Set Deadline</Button>
+        </div>
+      </Modal>
     </div>
   )
 }

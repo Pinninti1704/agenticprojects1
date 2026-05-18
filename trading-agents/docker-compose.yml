@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Data Service - Market data fetching
+  data-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    ports:
+      - "8001:8001"
+    environment:
+      - SERVICE_NAME=data
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: python -m uvicorn src.services.data_service:app --host 0.0.0.0 --port 8001
+
+  # Feature Service - Technical indicators
+  feature-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    ports:
+      - "8002:8002"
+    environment:
+      - SERVICE_NAME=features
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: python -m uvicorn src.services.feature_service:app --host 0.0.0.0 --port 8002
+
+  # Strategy Service - Signal generation
+  strategy-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    ports:
+      - "8003:8003"
+    environment:
+      - SERVICE_NAME=strategy
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: python -m uvicorn src.services.strategy_service:app --host 0.0.0.0 --port 8003
+
+  # Risk Service - Risk management
+  risk-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    ports:
+      - "8004:8004"
+    environment:
+      - SERVICE_NAME=risk
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: python -m uvicorn src.services.risk_service:app --host 0.0.0.0 --port 8004
+
+  # Execution Service - Paper trading
+  execution-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    ports:
+      - "8005:8005"
+    environment:
+      - SERVICE_NAME=execution
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: python -m uvicorn src.services.execution_service:app --host 0.0.0.0 --port 8005
+
+  # DuckDB for storage
+  duckdb:
+    image: duckdb/duckdb:latest
+    volumes:
+      - ./data:/data
+    command: /bin/bash -c "echo 'DuckDB ready'"
+
+  # Jupyter for research/notebooks
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jupyter/notebooks
+      - ./src:/home/jupyter/src
+    environment:
+      - JUPYTER_TOKEN=trading123
+    command: start-notebook.sh
+
+networks:
+  default:
+    name: trading-network
